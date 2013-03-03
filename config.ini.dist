@@ -1,0 +1,18 @@
+[email]
+smtp_host = "smtp.mail.com"
+smtp_port = 465
+smtp_encryption = ssl
+address = "mail@mail.com"
+name = "Your name"
+smtp_username = "mail@mail.com"
+smtp_password = "password"
+
+[database]
+db_username = user
+db_password = pass
+db_name     = db
+db_host     = 127.0.0.1
+db_port     = 27017
+
+[environment]
+environment = dev

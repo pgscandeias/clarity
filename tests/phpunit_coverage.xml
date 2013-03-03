@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit
+    backupGlobals               = "false"
+    backupStaticAttributes      = "false"
+    colors                      = "true"
+    convertErrorsToExceptions   = "true"
+    convertNoticesToExceptions  = "true"
+    convertWarningsToExceptions = "true"
+    processIsolation            = "false"
+    stopOnFailure               = "false"
+    syntaxCheck                 = "false"
+    bootstrap                   = "Tests/bootstrap.php"
+    >
+    
+    <php>
+        <ini name="memory_limit" value="128M" />
+    </php>
+    
+    <testsuites>
+        <testsuite name="Full">
+            <directory>Tests</directory>
+        </testsuite>
+    </testsuites>
+    
+    <filter>
+        <whitelist>
+            <directory>App</directory>
+            <directory>Common</directory>
+            <directory>Db</directory>
+            <directory>Tests</directory>
+
+            <exclude>
+                <file>Tests/bootstrap.php</file>
+                <file>Common/Component/Inflect.php</file>
+            </exclude>
+        </whitelist>
+        
+        <blacklist>
+            <directory>vendor</directory>
+        </blacklist>
+    </filter>
+    
+    <logging>
+  		<log type="coverage-html" target="Tests/log/report" charset="UTF-8" yui="true" highlight="true" lowUpperBound="70" highLowerBound="99" />
+  		<log type="testdox" target="Tests/log/testdox.html" />
+  	</logging>
+  	
+</phpunit>

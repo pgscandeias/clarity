@@ -1,0 +1,5 @@
+.DS_Store
+config.ini
+vendor/*
+import*
+cache/*
