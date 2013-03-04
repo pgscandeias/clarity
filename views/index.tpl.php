@@ -1,22 +1,21 @@
 <? include '_header.tpl.php' ?>
 
+<form action='/signup' method='post' class='signup'>
+    <fieldset>
+        <label>Project name</label>
+        <input type='text' name='account[name]' required>
 
-Only $20/month.
+        <label>Your name</label>
+        <input type='text' name='user[name]' required>
 
+        <label>Your email address:</label>
+        <input type='email' name='user[email]' required>
+    </fieldset>
 
-Start your 15 day free trial now:
-
-<form action='/signup' method='post'>
-    <label>Project name</label>
-    <input type='text' name='account[name]'>
-
-    <label>Your name</label>
-    <input type='text' name='user[name]'>
-
-    <label>Your email address:</label>
-    <input type='text' name='user[email]'>
-
-    <button type='submit'>Start free trial</button>
+    <button type='submit'>Start 15-day free trial</button>
+    <p class='help'>
+        just <strong>$20/month</strong> after that
+    </p>
 </form>
 
 
