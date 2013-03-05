@@ -94,13 +94,48 @@ $app->get('/logout', function() use ($app) {
 #
 # Public
 #
+
+// Homepage
 $app->get('/', function() use ($app, $view) {
-    $html = $view->render('index.tpl.php');
+    $html = $view->render('index.tpl.php', array('session' => $app->session));
     file_put_contents(cachePath('/'), $html);
     echo $html;
 
     return;
 });
+
+// Signup
+$app->post('/signup', function() use($app, $view) {
+    $errors = validateSignup($app);
+    if ($errors) {
+        $app->session->set('errors', $errors);
+        $app->redirect('/');
+    }
+
+    var_dump($_POST);die;
+});
+function validateSignup($app) {
+    $rules = array(
+        'user_name' => array('name' => 'Your name', 'required' => true),
+        'user_email' => array('name' => 'Your email', 'required' => true, 'email' => true),
+        'account_name' => array('name' => 'Project name', 'required' => true)
+    );
+
+    $errors = array();
+    foreach ($rules as $field => $rule) {
+        $value = $app->request->post($field);
+        $app->session->form->set($field, $value);
+
+        if (isset($rule['required']) && !$value) {
+            $errors[$field] = $rule['name'] . ' is required';
+        }
+        elseif (isset($rule['email']) && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+            $errors[$field] = $rule['name'] . ' must be a valid email address';
+        }
+    }
+
+    return $errors;
+}
 
 
 #

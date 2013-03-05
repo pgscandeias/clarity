@@ -32,6 +32,18 @@ strong {
     font-weight: 400;
 }
 
+a {
+    text-decoration: underline;
+    color: #777;
+}
+a:hover {
+    color: #000;
+}
+
+.warning {
+    color: #c00;
+}
+
 
 /**
  * Forms
@@ -99,6 +111,14 @@ button:active,
     margin: 0 auto;
 }
 
+.flash {
+    list-style: none;
+}
+
+footer {
+    text-align: center;
+    margin: 5em 0 2em;
+}
 
 /**
  * Header

@@ -1,6 +1,7 @@
 <?php
 set_exception_handler('App::exception'); // bootstrap
 require_once 'router.php';
+require_once 'Session.php';
 
 class App {
   protected $_server = array();
@@ -16,7 +17,7 @@ class App {
     $this->request = new Request;
     $this->session = new Session;
     $this->cookie = new Cookie;
-    $this->mail = new Mail();
+    $this->mail = new Mail;
   }
 
   public function redirect($url, $status = 200)
@@ -105,22 +106,6 @@ class Request {
   }
 }
 
-class Session {
-  public function get($var)
-  {
-    return isset($_SESSION[$var]) ? $_SESSION[$var] : null;
-  }
-
-  public function set($var, $value)
-  {
-    $_SESSION[$var] = $value;
-  }
-
-  public function remove($var)
-  {
-    unset($_SESSION[$var]);
-  }
-}
 
 class Cookie {
   public $name = '';
