@@ -12,7 +12,7 @@
         <label>Your name</label>
         <input type='text' name='user_name' value='<?= $session->form->get('user_name', false) ?>' required>
 
-        <label>Your email address:</label>
+        <label>Your email address</label>
         <input type='email' name='user_email' value='<?= $session->form->get('user_email', false) ?>' required>
 
         <label>Project name</label>
