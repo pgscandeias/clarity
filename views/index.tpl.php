@@ -15,13 +15,15 @@
         <label>Your email address</label>
         <input type='email' name='user_email' value='<?= $session->form->get('user_email', false) ?>' required>
 
-        <label>Project name</label>
+        <label>Team or Project name</label>
         <input type='text' name='account_name' value='<?= $session->form->get('account_name', false) ?>' required>
     </fieldset>
 
     <button type='submit'>Start 15-day free trial</button>
-    <p class='help'>
-        just <strong>$9/month</strong> after that
+    <p>
+        Just <strong>$9/month</strong> after that.
+        <br>
+        No commitment, cancel anytime.
     </p>
 </form>
 

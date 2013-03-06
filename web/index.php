@@ -11,14 +11,17 @@ define("CACHE_DIR", __DIR__ . "/../cache");
 function cachePath($slug) {
     return CACHE_DIR . '/' . md5($slug);
 }
-if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
-    $slug = $_SERVER['REQUEST_URI'];
-    $cachedHtml = @file_get_contents(cachePath($slug));
-    if ($cachedHtml) {
-        echo $cachedHtml;
-        die;
-    }
-}
+#
+# XXX Leave cache off for now - it messes up display of session flash messages
+#
+# if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
+#     $slug = $_SERVER['REQUEST_URI'];
+#     $cachedHtml = @file_get_contents(cachePath($slug));
+#     if ($cachedHtml) {
+#         echo $cachedHtml;
+#         die;
+#     }
+# }
 
 
 #
@@ -112,7 +115,12 @@ $app->post('/signup', function() use($app, $view) {
         $app->redirect('/');
     }
 
-    var_dump($_POST);die;
+    $account = new Account(array(
+        'name' => $app->request->post('account_name'),
+    ));
+    $account->generateSlug();
+
+    var_dump($_POST, $account);die;
 });
 function validateSignup($app) {
     $rules = array(
