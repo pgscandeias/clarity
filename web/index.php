@@ -120,7 +120,8 @@ $app->post('/signup', function() use($app, $view) {
     ));
     $account->generateSlug();
 
-    var_dump($_POST, $account);die;
+    $user = User::findOneBy('email', $app->request->post('user_email'));
+    var_dump($user);die;
 });
 function validateSignup($app) {
     $rules = array(

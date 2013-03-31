@@ -1,5 +1,7 @@
 .DS_Store
-config.ini
+config.dev.ini
+config.prod.ini
+config.test.ini
 vendor/*
 import*
 cache/*

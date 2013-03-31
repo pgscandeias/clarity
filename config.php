@@ -7,7 +7,7 @@ class Config
     {
         $ini = parse_ini_file($iniPath);
         if (!$ini) {
-            throw new Exception('No valid config file found');
+            throw new Exception('No valid config file found (ENV='.APP_ENV.')');
         }
 
         static::$config = $ini;

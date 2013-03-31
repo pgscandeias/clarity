@@ -2,7 +2,14 @@
 
 # Configuration
 require_once 'config.php';
-Config::_init(__DIR__ . '/config.ini');
+if (!defined('APP_ENV')) {
+    if (file_exists(__DIR__ . '/config.dev.ini')) {
+        define('APP_ENV', 'dev');
+    } else {
+        define('APP_ENV', 'prod');
+    }
+}
+Config::_init(__DIR__ . '/config.'.APP_ENV.'.ini');
 
 # Error reporting
 if (Config::get('environment') == 'dev') {
@@ -19,23 +26,14 @@ require_once APP_ROOT . '/framework.php';
 require_once APP_ROOT . '/view.php';
 
 # Business
-require_once APP_ROOT . '/models.php';
+require_once APP_ROOT . '/Common/AppModel.php';
+$models = array('User', 'Account');
+foreach ($models as $m) {
+    require_once APP_ROOT . "/model/$m.php";
+}
 
 # Db connection
-$dsn = 'mongodb://'.Config::get('db_username').':'.Config::get('db_password').'';
-$dsn.= '@'.Config::get('db_host').':'.Config::get('db_port');
-$dsn.= '/'.Config::get('db_name');
-
-try { $mongo = new MongoClient($dsn); }
-catch (Exception $e) {
-    echo "Database error";
-    if (Config::get('environment') == 'dev') {
-        echo "<br>".$dsn;
-        var_dump($e->getMessage());
-    }
-    die;
-}
-Model::$db = $mongo->selectDB(Config::get('db_name'));
+AppModel::connect();
 
 # Init
 $app = new App();

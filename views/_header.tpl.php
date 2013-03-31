@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="text/javascript" src="//use.typekit.net/mbo7skx.js"></script>
-        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>        
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400' rel='stylesheet' type='text/css'>
 
         <title>Beautiful Team Chat | Clarity</title>
 
