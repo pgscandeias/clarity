@@ -58,4 +58,36 @@ class SignupTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($s2->role->id);
         $this->assertNotEquals($s->account->slug, $s2->account->slug);
     }
+
+    public function testBadEmails()
+    {
+        $this->overridePost(array(
+            'user_name' => 'Pedro',
+            'user_email' => '',
+            'account_name' => 'ACME',
+        ));
+
+        $s = new SignupAction($this->app);
+        $this->assertNotNull($s->errors['user_email']);
+
+        $this->overridePost(array(
+            'user_email' => 'i am not an email',
+        ));
+        $s2 = new SignupAction($this->app);
+        $this->assertNotNull($s2->errors['user_email']);
+    }
+
+    public function testEmptyRequest()
+    {
+        $this->overridePost(array(
+            'user_name' => '',
+            'user_email' => '',
+            'account_name' => '',
+        ));
+
+        $s = new SignupAction($this->app);
+        $this->assertNotNull($s->errors['user_name']);
+        $this->assertNotNull($s->errors['user_email']);
+        $this->assertNotNull($s->errors['account_name']);
+    }
 }
