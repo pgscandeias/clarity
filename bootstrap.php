@@ -12,7 +12,7 @@ if (!defined('APP_ENV')) {
 Config::_init(__DIR__ . '/config.'.APP_ENV.'.ini');
 
 # Error reporting
-if (Config::get('environment') == 'dev') {
+if (Config::get('environment') != 'prod') {
     error_reporting(E_ALL);
 } else {
     error_reporting(0);
@@ -27,9 +27,15 @@ require_once APP_ROOT . '/view.php';
 
 # Business
 require_once APP_ROOT . '/Common/AppModel.php';
-$models = array('User', 'Account');
+$models = array('User', 'Account', 'Role');
 foreach ($models as $m) {
     require_once APP_ROOT . "/model/$m.php";
+}
+
+# Actions
+$actions = array('Signup');
+foreach ($actions as $a) {
+    require_once APP_ROOT . "/action/".$a."Action.php";
 }
 
 # Db connection

@@ -10,6 +10,37 @@ class UserTest extends \PHPUnit_Framework_TestCase
         'authToken' => 'AT',
     );
 
+    private function initDb($loadFixtures = false)
+    {
+        User::$db->exec(file_get_contents(APP_ROOT . '/schema.sql'));
+
+        if ($loadFixtures) {
+            User::$db->exec('
+                INSERT INTO users (name, email, loginToken, authToken) 
+                VALUES ("Pedro", "pgscandeias@gmail.com", "x", "x")
+            ');
+        }
+    }
+
+    private function createSampleUser()
+    {
+        $user = new User;
+        foreach ($this->sampleData as $f => $v) $user->{$f} = $v;
+        $user->save();
+
+        return $user;
+    }
+
+    private function createSampleAccount()
+    {
+        $account = new Account;
+        $account->name = 'ACME';
+        $account->generateSlug();
+        $account->save();
+
+        return $account;
+    }
+
 
     public function testLoaded()
     {
@@ -59,25 +90,15 @@ class UserTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-
-    private function initDb($loadFixtures = false)
+    public function testAddAccount()
     {
-        User::$db->exec(file_get_contents(APP_ROOT . '/schema.sql'));
-
-        if ($loadFixtures) {
-            User::$db->exec('
-                INSERT INTO users (name, email, loginToken, authToken) 
-                VALUES ("Pedro", "pgscandeias@gmail.com", "x", "x")
-            ');
-        }
-    }
-
-    private function createSampleUser()
-    {
-        $user = new User;
-        foreach ($this->sampleData as $f => $v) $user->{$f} = $v;
-        $user->save();
-
-        return $user;
+        $user = $this->createSampleUser();
+        $account = $this->createSampleAccount();
+        $role = $user->addAccount($account, 'admin');
+        $this->assertNotNull($role->id);
+        
+        $dbRole = Role::get($account->id, $user->id);
+        $this->assertInstanceOf('Role', $dbRole);
+        $this->assertEquals('admin', $dbRole->role);
     }
 }

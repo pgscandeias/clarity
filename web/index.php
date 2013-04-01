@@ -42,7 +42,7 @@ $app->post('/login', function() use ($app, $view) {
     $token = User::generateLoginToken($email);
     $link = 'http://'.$_SERVER['HTTP_HOST'].'/auth?t='.$token;
 
-    $user = User::findOneBy(array('email' => $email));
+    $user = User::findOneBy('email', $email);
     if ($user) {
         $emailBody = $view->render('auth/email.tpl.php', array('link' => $link));
         $user->loginToken = $token;
@@ -73,7 +73,7 @@ $app->get('/auth?*', function() use ($app) {
     $user = false;
     $loginToken = (string) trim($app->request->get('t'));
     if ($loginToken) {
-        $user = User::findOneBy(array('loginToken' => $loginToken));
+        $user = User::findOneBy('loginToken', $loginToken);
     }
     if (!$user) { $app->redirect('/'); }
 
@@ -109,42 +109,16 @@ $app->get('/', function() use ($app, $view) {
 
 // Signup
 $app->post('/signup', function() use($app, $view) {
-    $errors = validateSignup($app);
-    if ($errors) {
-        $app->session->set('errors', $errors);
+    $action = new SignupAction($app);
+
+    if ($action->errors) {
+        $app->session->set('errors', $action->errors);
         $app->redirect('/');
     }
 
-    $account = new Account(array(
-        'name' => $app->request->post('account_name'),
-    ));
-    $account->generateSlug();
-
-    $user = User::findOneBy('email', $app->request->post('user_email'));
-    var_dump($user);die;
+    var_dump($action->user, $action->account, $action->role);
+    die("all good");
 });
-function validateSignup($app) {
-    $rules = array(
-        'user_name' => array('name' => 'Your name', 'required' => true),
-        'user_email' => array('name' => 'Your email', 'required' => true, 'email' => true),
-        'account_name' => array('name' => 'Project name', 'required' => true)
-    );
-
-    $errors = array();
-    foreach ($rules as $field => $rule) {
-        $value = $app->request->post($field);
-        $app->session->form->set($field, $value);
-
-        if (isset($rule['required']) && !$value) {
-            $errors[$field] = $rule['name'] . ' is required';
-        }
-        elseif (isset($rule['email']) && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-            $errors[$field] = $rule['name'] . ' must be a valid email address';
-        }
-    }
-
-    return $errors;
-}
 
 
 #

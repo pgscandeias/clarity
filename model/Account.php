@@ -4,15 +4,23 @@ class Account extends AppModel
 {
     public static $_table = 'accounts';
     public static $_fields = array(
-        'name' => 'string',
-        'slug' => 'string',
-        'created' => 'datetime',
-        'updated' => 'datetime', 
+        'name',
+        'slug',
     );
 
-    public function generateSlug()
+    public $name;
+    public $slug;
+
+
+    public function generateSlug($i = 1)
     {
         $this->slug = slugify($this->name);
+        if ($i > 1) $this->slug .= $i;
+
+        if (static::findOneBy('slug', $this->slug)) {
+            $i++;
+            $this->generateSlug($i);
+        }
     }
 }
 

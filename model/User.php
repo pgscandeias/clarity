@@ -15,8 +15,15 @@ class User extends AppModel
     public $loginToken;
     public $authToken;
 
+    public function __construct(array $data = array())
+    {
+        parent::__construct($data);
 
-    public static function generateLoginToken($email)
+        $this->loginToken = static::generateToken();
+        $this->authToken = static::generateToken();
+    }
+
+    public static function generateToken()
     {
         // Yeah this is wrong. Just experimenting.
         return sha1(mt_rand());
@@ -38,8 +45,19 @@ class User extends AppModel
         return $this;
     }
 
+    public function addAccount(Account $account, $role = 'user')
+    {
+        $r = new Role;
+        $r->account_id = $account->id;
+        $r->user_id = $this->id;
+        $r->role = $role;
+        $r->save();
+
+        return $r;
+    }
+
     public static function getByAuthCookie(Cookie $cookie)
     {
-        return static::findOneBy(array('authToken' => $cookie->get('auth_token')));
+        return static::findOneBy('authToken', $cookie->get('auth_token'));
     }
 }
