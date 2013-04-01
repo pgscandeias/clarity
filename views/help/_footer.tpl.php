@@ -1,0 +1,1 @@
+<? include __DIR__ . '/../_footer.tpl.php' ?>

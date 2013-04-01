@@ -84,8 +84,8 @@ $app->get('/auth?*', function() use ($app) {
     // Generate Auth Cookie token
     $user->renewAuthCookie($app->cookie)->save();
 
-    // Go to admin entry point
-    $app->redirect('/admin/posts');
+    // Go to dashboard
+    $app->redirect('/dashboard');
 });
 
 $app->get('/logout', function() use ($app) {
@@ -99,6 +99,7 @@ $app->get('/logout', function() use ($app) {
 #
 
 // Homepage
+
 $app->get('/', function() use ($app, $view) {
     $html = $view->render('index.tpl.php', array('session' => $app->session));
     file_put_contents(cachePath('/'), $html);
@@ -107,7 +108,26 @@ $app->get('/', function() use ($app, $view) {
     return;
 });
 
+
+// Help
+
+$app->get('/help/:page', function($page) use ($app, $view) {
+    $tpl = file_exists(__DIR__ . '/../views/help/'.$page.'.tpl.php') ? 
+           'help/'.$page.'.tpl.php' :
+           '404.tpl.php'
+    ;
+    echo $view->render($tpl);
+});
+
+
 // Signup
+
+$app->get('/signup/welcome', function() use($app, $view) {
+    echo $view->render('signup/welcome.tpl.php', array(
+        'email' => $app->session->get('user_email')
+    ));
+});
+
 $app->post('/signup', function() use($app, $view) {
     $action = new SignupAction($app);
 
@@ -116,8 +136,17 @@ $app->post('/signup', function() use($app, $view) {
         $app->redirect('/');
     }
 
-    var_dump($action->user, $action->account, $action->role);
-    die("all good");
+    $link = 'http://'.$_SERVER['HTTP_HOST'].'/auth?t='.$action->user->loginToken;
+    $emailBody = $view->render('signup/email.tpl.php', array('link' => $link));
+
+    try {
+        $app->mail->send($action->user->email, 'Access link', $emailBody);
+        $app->session->set('wasLoginMailSent', true);
+        $app->session->set('user_email', $action->user->email);
+        $app->redirect('/signup/welcome');
+    } catch (Exception $e) {
+        echo $view->render('signup/email_error.tpl.php');
+    }
 });
 
 
