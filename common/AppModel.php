@@ -8,8 +8,9 @@ abstract class AppModel
     public $id;
 
 
-    public function __construct(array $data = array())
+    public function __construct($data = array())
     {
+        $data = (array) $data;
         foreach ($data as $property => $value) {
             $this->{$property} = $value;
         }

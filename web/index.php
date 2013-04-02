@@ -151,7 +151,9 @@ $app->post('/signup', function() use($app, $view) {
 $app->get('/dashboard', function() use ($app, $view) {
     $user = activeUser($app);
 
-    echo $view->render('app/dashboard.tpl.php');
+    echo $view->render('app/dashboard.tpl.php', array(
+        'user' => $user,
+    ));
 });
 
 

@@ -57,6 +57,40 @@ class User extends AppModel
         return $r;
     }
 
+    // Return a list of Accounts with the $role property populated for this user
+    public function getAccounts()
+    {
+        // XXX: Hardcoding the ORDER clause for now
+        $sth = static::$db->prepare('
+            SELECT 
+                a.*,
+                r.role
+            FROM '.Account::$_table.' a
+            JOIN '.Role::$_table.' r
+            WHERE r.user_id = :uid
+            GROUP BY a.id
+            ORDER BY a.name ASC
+        ');
+
+        if (!$sth->execute(array(':uid' => $this->id))) return;
+
+        $results = array();
+        $rows = $sth->fetchAll(PDO::FETCH_OBJ);
+        foreach ($rows as $row) {
+            $results[] = new Account($row);
+        }
+
+        return $results;
+    }
+
+    public function gravatar($size = 50)
+    {
+        return "https://www.gravatar.com/avatar/"
+               . md5($this->email)
+               . "?s=" . $size
+        ;
+    }
+
     public static function getByAuthCookie(Cookie $cookie)
     {
         return static::findOneBy('authToken', $cookie->get('auth_token'));

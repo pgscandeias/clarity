@@ -3,20 +3,18 @@
 <h3>About the login process</h3>
 
 <p>
-    When you try to login, Clarity asks for your email address and checks if an
-    account exists for that address. Then it generates a unique, single use
-    code and mails it to you.
+    When you sign up or log in, Clarity generates a unique, single use
+    code and sends it to your email address as a form of verification.
 </p>
 
 <p>
     This code looks like an ordinary link.
-    All you have to do is click on it.
-    When you do, Clarity knows who you are and starts your user session.
+    All you have to do is click on it to tell Clarity you are who you're
+    supposed to be. Clarity then validates the code and logs you in.
 </p>
 
 <p>
-    This way, Clarity doesn't need to ask your for a password.
-    It's much safer, and more convenient as well.
+    This way you don't even need a password!
 </p>
 
 <p>

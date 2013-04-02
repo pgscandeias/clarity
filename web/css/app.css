@@ -1,0 +1,54 @@
+/* App styles */
+
+
+/* Layout */
+
+.container {
+    margin: 0 1em;
+    width: auto;
+}
+
+
+/**
+ * Navigation
+ */
+
+.title {
+    overflow: hidden;
+    line-height: 2em;
+    color: #eee;
+    text-align: left;
+}
+
+.nav-main, .nav-user {
+    width: 50%;
+}
+
+.nav-main {
+    float: left;
+}
+
+.nav-main small {
+    color: #999;
+}
+
+.nav-user {
+    float: right;
+    text-align: right;
+}
+
+.nav-user li {
+    margin-left: 1em;
+}
+.nav-user li a {
+    color: #888;
+    text-decoration: none;
+}
+.nav-user li a:hover {
+    color: #fff;
+}
+
+.nav-user .avatar {
+    vertical-align: middle;
+    height: 2em;;
+}

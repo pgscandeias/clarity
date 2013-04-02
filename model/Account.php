@@ -10,6 +10,7 @@ class Account extends AppModel
 
     public $name;
     public $slug;
+    public $role; // Not saved in DB, populated by the User model
 
 
     public function generateSlug($i = 1)

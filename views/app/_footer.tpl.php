@@ -1,1 +1,7 @@
-<? include __DIR__ . '/../_footer.tpl.php' ?>
+        </div><!-- .container -->
+
+        <footer>
+            <a href='http://pedrogilcandeias.com/about'>@pgcandeias</a>
+        </footer>
+    </body>
+</html>

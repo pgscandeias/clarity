@@ -5,9 +5,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 {
     private $sampleData = array(
         'name' => 'Pedro',
-        'email' => 'pgscandeias@gmail.com',
-        'loginToken' => 'LT',
-        'authToken' => 'AT',
+        'email' => 'pgscandeias@gmail.com'
     );
 
     public function setUp()
@@ -102,6 +100,32 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $dbRole = Role::get($account->id, $user->id);
         $this->assertInstanceOf('Role', $dbRole);
         $this->assertEquals('admin', $dbRole->role);
+    }
+
+    public function testGetAccounts()
+    {
+        $user = $this->createSampleUser();
+        $accountNames = array('StandOnline', 'Dominio das Artes', 'TuaZona', 'AutoSimplex', 'Threddie');
+        sort($accountNames); // Because User::getAccounts returns them sorted by default
+        foreach ($accountNames as $aname) {
+            $a = new Account;
+            $a->name = $aname;
+            $a->generateSlug();
+            $a->save();
+
+            $user->addAccount($a, 'admin');
+        }
+
+        $dbUser = User::find($user->id);
+        $this->assertNotEmpty($dbUser);
+        $accounts = $dbUser->getAccounts();
+        $this->assertNotEmpty($accounts);
+        $this->assertEquals(count($accountNames), count($accounts));
+
+        foreach ($accountNames as $k => $aname) {
+            $this->assertEquals($aname, $accounts[$k]->name);
+            $this->assertEquals('admin', $accounts[$k]->role);
+        }
     }
 
     public function testFindAll()
