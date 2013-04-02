@@ -40,3 +40,18 @@ CREATE TABLE IF NOT EXISTS `roles` (
   INDEX account_user (account_id, user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+-- 
+-- Structure for table `rooms`
+-- 
+
+DROP TABLE IF EXISTS `rooms`;
+CREATE TABLE IF NOT EXISTS `rooms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `account_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` DATETIME NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

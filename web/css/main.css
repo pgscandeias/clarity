@@ -93,7 +93,8 @@ fieldset {
 
 input[type=text],
 input[type=email],
-button {
+textarea,
+.btn {
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
@@ -106,12 +107,12 @@ button {
 }
 
 input[type=text],
-input[type=email] {
+input[type=email],
+textarea {
     width: 15em;
     font-weight: 400;
 }
 
-button,
 .btn {
     background: #eee;
     border-radius: 5px;
@@ -123,12 +124,10 @@ button,
     padding: 0.25em 1em;
 }
 
-button:hover,
 .btn:hover {
     background: #ddd;
 }
 
-button:active,
 .btn:active {
     border-color: #555;
     background: #555;
@@ -141,6 +140,10 @@ button:active,
  */
 .container {
     margin: 0 auto;
+    overflow: hidden;
+}
+
+.m {
     width: 640px;
 }
 
@@ -179,26 +182,41 @@ footer {
     font-size: 1.25em;
     line-height: 1em;
 }
+.public-top-nav {
+    position: absolute;
+    text-align: right;
+    right: 1em;
+    margin-right: 1em;
+}
+.public-top-nav a {
+    color: #999;
+    text-decoration: none;
+    margin-left: 1em;
+}
+.public-top-nav a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
 
 
 /**
  * Signup form
  */
-.signup,
-.signup input {
+.form-centered,
+.form-centered input {
     text-align: center;
 }
 
-.signup button {
+.form-centered button {
     border-color: green;
     color: #fff;
     background: green;
 }
-.signup button:hover {
+.form-centered button:hover {
     background: #090;
     border-color: #090;
 }
 
-.signup .help strong {
+.form-centered .help strong {
     color: green;
 }

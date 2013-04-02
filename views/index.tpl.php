@@ -1,6 +1,6 @@
 <? include '_header.tpl.php' ?>
 
-<form action='/signup' method='post' class='signup'>
+<form action='/signup' method='post' class='signup form-centered'>
     <? if ($session->get('errors')): ?>
         <ul class='flash warning'>
             <? foreach ($session->get('errors', false) as $error): ?>
@@ -19,7 +19,7 @@
         <input type='text' name='account_name' value='<?= $session->form->get('account_name', false) ?>' required>
     </fieldset>
 
-    <button type='submit'>Start 15-day free trial</button>
+    <button class='btn' type='submit'>Start 15-day free trial</button>
     <p>
         Just <strong>$9/month</strong> after that.
         <br>

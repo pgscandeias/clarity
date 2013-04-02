@@ -41,7 +41,7 @@
     margin-left: 1em;
 }
 .nav-user li a {
-    color: #888;
+    color: #bbb;
     text-decoration: none;
 }
 .nav-user li a:hover {
@@ -51,4 +51,36 @@
 .nav-user .avatar {
     vertical-align: middle;
     height: 2em;;
+}
+
+
+/**
+ * Tools top bar
+ */
+
+.tools-top {
+    text-align: right;
+}
+
+.tools-top .room-create {
+    color: green;
+    font-weight: 400;
+}
+
+.tools-top a:hover {
+    color: #000;
+}
+
+
+/**
+ * Forms
+ */
+.form-block {
+    border: 1px solid #ccc;
+    background: #fff;
+    margin-bottom: 1em;
+    padding: 1em;
+}
+form .controls {
+    margin-bottom: 1em;
 }

@@ -23,6 +23,11 @@ class Account extends AppModel
             $this->generateSlug($i);
         }
     }
+
+    public function getRooms()
+    {
+        return array();
+    }
 }
 
 function slugify($string, $space = "-") {

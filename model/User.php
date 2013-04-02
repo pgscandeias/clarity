@@ -15,7 +15,7 @@ class User extends AppModel
     public $loginToken;
     public $authToken;
 
-    public function __construct(array $data = array())
+    public function __construct($data = array())
     {
         parent::__construct($data);
 
@@ -66,7 +66,7 @@ class User extends AppModel
                 a.*,
                 r.role
             FROM '.Account::$_table.' a
-            JOIN '.Role::$_table.' r
+            JOIN '.Role::$_table.' r on r.account_id = a.id
             WHERE r.user_id = :uid
             GROUP BY a.id
             ORDER BY a.name ASC
@@ -81,6 +81,16 @@ class User extends AppModel
         }
 
         return $results;
+    }
+
+    public function hasAccount(Account $account)
+    {
+        $accounts = $this->getAccounts();
+        foreach ($accounts as $a) {
+            if ($a->id == $account->id) return true;
+        }
+
+        return false;
     }
 
     public function gravatar($size = 50)

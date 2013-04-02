@@ -27,7 +27,7 @@ abstract class AppModel
             $dbh = new PDO($dsn, Config::get('db_username'), Config::get('db_password'));
         } catch (PDOException $e) {
             echo "Connection failed";
-            if (Config::get('environment') == 'dev') {
+            if (Config::get('environment') != 'prod') {
                 var_dump($e->getMessage());
             }
             die;
@@ -81,13 +81,8 @@ abstract class AppModel
         $row = $sth->fetch(PDO::FETCH_OBJ);
         if (!$row) return;
 
-        $o = new static;
+        $o = new static($row);
         $o->id = $row->id;
-        foreach ($row as $field => $value) {
-            if (in_array($field, static::$_fields)) {
-                $o->{$field} = $value;
-            }
-        }
 
         return $o;
     }
@@ -99,6 +94,9 @@ abstract class AppModel
         $params = $columns = array();
         foreach (static::$_fields as $field) {
             $columns[] = $field;
+            if ($this->{$field} instanceof AppModel) {
+                die("what");
+            }
             $params[':'.$field] = $this->{$field};
         }
 
@@ -107,7 +105,7 @@ abstract class AppModel
     }
 
 
-    private function insert(array $columns, array $params)
+    protected function insert(array $columns, array $params)
     {
         $q = 'INSERT INTO '.static::$_table.' ('
            . implode(', ', $columns)
@@ -116,12 +114,15 @@ abstract class AppModel
            . ')'
         ;
         $sth = static::$db->prepare($q);
-        if (!$sth->execute($params)) return;
+        if (!$sth->execute($params)) {
+            if (APP_ENV != 'prod') { var_dump($sth->errorInfo()); die; }
+            return;
+        }
 
         $this->id = static::$db->lastInsertId();
     }
 
-    private function update(array $params)
+    protected function update(array $params)
     {
         $pairs = array();
         foreach ($params as $k=>$v) {
@@ -135,6 +136,9 @@ abstract class AppModel
         ;
 
         $sth = static::$db->prepare($q);
-        $sth->execute($params);
+        if (!$sth->execute($params)) {
+            if (APP_ENV != 'prod') { var_dump($sth->errorInfo()); die; }
+            return;
+        }
     }
 }

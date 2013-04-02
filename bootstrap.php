@@ -1,6 +1,7 @@
 <?php
 
 # Configuration
+date_default_timezone_set('UTC');
 require_once 'config.php';
 if (!defined('APP_ENV')) {
     if (file_exists(__DIR__ . '/config.dev.ini')) {
@@ -27,7 +28,7 @@ require_once APP_ROOT . '/view.php';
 
 # Business
 require_once APP_ROOT . '/Common/AppModel.php';
-$models = array('User', 'Account', 'Role');
+$models = array('User', 'Account', 'Role', 'Room');
 foreach ($models as $m) {
     require_once APP_ROOT . "/model/$m.php";
 }

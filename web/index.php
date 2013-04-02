@@ -51,6 +51,7 @@ $app->post('/login', function() use ($app, $view) {
         try {
             $app->mail->send($email, 'Access link', $emailBody);
             $app->session->set('wasLoginMailSent', true);
+            $app->session->set('user_email', $app->request->post('email'));
             $app->redirect('/login/sent');
         } catch (Exception $e) {
             echo $view->render('auth/email_error.tpl.php');
@@ -62,9 +63,15 @@ $app->post('/login', function() use ($app, $view) {
 });
 
 $app->get('/login/sent', function() use ($app, $view) {
+    echo $view->render('auth/email_sent.tpl.php', array(
+        'email' => $app->session->get('user_email')
+    ));
+    die;
     if ($app->session->get('wasLoginMailSent')) {
         $app->session->remove('wasLoginMailSent');
-        echo $view->render('auth/email_success.tpl.php');
+        echo $view->render('auth/email_sent.tpl.php', array(
+            'email' => $app->session->get('user_email')
+        ));
 
     } else { $app->redirect('/'); }
 });
@@ -146,13 +153,41 @@ $app->post('/signup', function() use($app, $view) {
 });
 
 
-// Dashboard
+// App - Dashboard
 
 $app->get('/dashboard', function() use ($app, $view) {
     $user = activeUser($app);
 
     echo $view->render('app/dashboard.tpl.php', array(
         'user' => $user,
+    ));
+});
+
+
+// App - rooms
+
+$app->post('/:slug/rooms/add', function($slug) use ($app, $view) {
+    $user = activeUser($app);
+    $account = Account::findOneBy('slug', $slug);
+    if (!$account || !$user->hasAccount($account)) die(show404($view));
+
+    var_dump($_POST);
+    die;
+});
+
+$app->get('/:slug/rooms', function($slug) use ($app, $view) {
+    echo "rooms";
+});
+
+$app->get('/:slug', function($slug) use ($app, $view) {
+    $user = activeUser($app);
+    $account = Account::findOneBy('slug', $slug);
+    if (!$account || !$user->hasAccount($account)) die(show404($view));
+
+    echo $view->render('app/rooms/index.tpl.php', array(
+        'user' => $user,
+        'account' => $account,
+        'rooms' => $account->getRooms(),
     ));
 });
 
@@ -170,8 +205,7 @@ if (APP_ENV != 'prod') {
 #
 # 404
 #
-echo $view->render('404.tpl.php');
-die;
+die(show404($view));
 
 
 function activeUser($app) {
@@ -185,4 +219,9 @@ function activeUser($app) {
     $user->renewAuthCookie($app->cookie);
 
     return $user;
+}
+
+function show404($view)
+{
+    return $view->render('404.tpl.php');
 }

@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Write post</title>
-    </head>
+<? include __DIR__ . '/../_header.tpl.php' ?>
+    
+    
+    <form action='' method='post' class='form-centered'>
+        <h1>Login</h1>
 
-    <body>
-        <p>
-            Get an access link by email.
-        </p>
-        <form action='' method='post'>
-            <label>Email:</label>
+        <fieldset>
+            <label>Please enter your email address:</label>
             <input type='email' name='email'>
+        </fieldset>
 
-            <button type='submit'>Get access</button>
-        </form>
-    </body>
-</html>
+        <button class='btn' type='submit'>Get access</button>
+    </form>
+
+<? include __DIR__ . '/../_footer.tpl.php' ?>

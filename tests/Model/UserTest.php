@@ -128,6 +128,23 @@ class UserTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testHasAccount()
+    {
+        $user = $this->createSampleUser();
+
+        $a1 = new Account(array('name' => 'Acme'));
+        $a1->generateSlug();
+        $a1->save();
+        $user->addAccount($a1);
+
+        $a2 = new Account(array('name' => 'Acme2'));
+        $a2->generateSlug();
+        $a2->save();
+
+        $this->assertTrue($user->hasAccount($a1));
+        $this->assertFalse($user->hasAccount($a2));
+    }
+
     public function testFindAll()
     {
         $ud1 = array(

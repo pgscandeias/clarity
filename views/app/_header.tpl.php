@@ -9,13 +9,15 @@
 
         <link rel="stylesheet" type="text/css" href="/css/main.css">
         <link rel="stylesheet" type="text/css" href="/css/app.css">
+
+        <script src='/js/jquery-1.9.1.min.js'></script>
     </head>
 
     <body>
         <div class='title'>
             <div class='container'>
-                <nav class='nav-main inline'>
-                    Clarity
+                <nav class='nav-main inline lead'>
+                    <?= @$account ? $account->name : 'Clarity' ?>
                 </nav>
 
                 <nav class='nav-user inline'>

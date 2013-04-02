@@ -13,6 +13,11 @@
     <body>
         <div class='title'>
             <div class='container'>
+                <ul class='public-top-nav inline unstyled'>
+                    <li><a href='/'>Home</a></li>
+                    <li><a href='/login'>Login</a></li>
+                </ul>
+
                 <h1>
                     Clarity
                 </h1>
