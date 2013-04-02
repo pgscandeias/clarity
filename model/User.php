@@ -31,7 +31,7 @@ class User extends AppModel
 
     public function renewAuthCookie(Cookie $cookie)
     {
-        $this->authToken = sha1(mt_rand()); // rong, rong, rong
+        $this->authToken = static::generateToken();
 
         $tokenCookie = $cookie::generate();
         $tokenCookie
@@ -42,6 +42,7 @@ class User extends AppModel
             ->send()
         ;
 
+        $this->save();
         return $this;
     }
 

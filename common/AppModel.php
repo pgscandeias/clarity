@@ -35,6 +35,31 @@ abstract class AppModel
         static::$db = $dbh;
     }
 
+    public static function all()
+    {
+        if (empty(static::$_table)) return;
+
+        $sth = static::$db->prepare('SELECT * FROM '.static::$_table);
+        if (!$sth->execute()) return;
+
+        $rows = $sth->fetchAll(PDO::FETCH_OBJ);
+        $results = array();
+
+        foreach ($rows as $row) {
+            $o = new static;
+            $o->id = $row->id;
+            foreach ($row as $field => $value) {
+                if (in_array($field, static::$_fields)) {
+                    $o->{$field} = $value;
+                }
+            }
+
+            $results[] = $o;
+        }
+
+        return $results;
+    }
+
     public static function find($id)
     {
         return static::findOneBy('id', $id);
@@ -76,6 +101,13 @@ abstract class AppModel
             $params[':'.$field] = $this->{$field};
         }
 
+        if ($this->id) $this->update($params);
+        else $this->insert($columns, $params);
+    }
+
+
+    private function insert(array $columns, array $params)
+    {
         $q = 'INSERT INTO '.static::$_table.' ('
            . implode(', ', $columns)
            . ') VALUES ('
@@ -86,5 +118,22 @@ abstract class AppModel
         if (!$sth->execute($params)) return;
 
         $this->id = static::$db->lastInsertId();
+    }
+
+    private function update(array $params)
+    {
+        $pairs = array();
+        foreach ($params as $k=>$v) {
+            $pairs[] = trim($k, ':')." = $k"; // Remove leading ':''
+        }
+        $params[':id'] = $this->id;
+        
+        $q = 'UPDATE '.static::$_table.' SET '
+           . implode(', ', $pairs)
+           . ' WHERE id = :id'
+        ;
+
+        $sth = static::$db->prepare($q);
+        $sth->execute($params);
     }
 }

@@ -39,13 +39,13 @@ $app->get('/login', function() use ($view) {
 
 $app->post('/login', function() use ($app, $view) {
     $email = (string) $app->request->post('email');
-    $token = User::generateLoginToken($email);
+    $token = User::generateToken();
     $link = 'http://'.$_SERVER['HTTP_HOST'].'/auth?t='.$token;
 
     $user = User::findOneBy('email', $email);
     if ($user) {
         $emailBody = $view->render('auth/email.tpl.php', array('link' => $link));
-        $user->loginToken = $token;
+        $user->authToken = $token;
         $user->save();
 
         try {
@@ -71,17 +71,13 @@ $app->get('/login/sent', function() use ($app, $view) {
 
 $app->get('/auth?*', function() use ($app) {
     $user = false;
-    $loginToken = (string) trim($app->request->get('t'));
-    if ($loginToken) {
-        $user = User::findOneBy('loginToken', $loginToken);
+    $authToken = (string) trim($app->request->get('t'));
+    if ($authToken) {
+        $user = User::findOneBy('authToken', $authToken);
     }
     if (!$user) { $app->redirect('/'); }
 
-    // Burn token
-    $user->loginToken = null;
-    $user->save();
-
-    // Generate Auth Cookie token
+    // regenerate Auth Cookie token
     $user->renewAuthCookie($app->cookie)->save();
 
     // Go to dashboard
@@ -136,7 +132,7 @@ $app->post('/signup', function() use($app, $view) {
         $app->redirect('/');
     }
 
-    $link = 'http://'.$_SERVER['HTTP_HOST'].'/auth?t='.$action->user->loginToken;
+    $link = 'http://'.$_SERVER['HTTP_HOST'].'/auth?t='.$action->user->authToken;
     $emailBody = $view->render('signup/email.tpl.php', array('link' => $link));
 
     try {
@@ -150,8 +146,41 @@ $app->post('/signup', function() use($app, $view) {
 });
 
 
+// Dashboard
+
+$app->get('/dashboard', function() use ($app, $view) {
+    $user = activeUser($app);
+
+    echo $view->render('app/dashboard.tpl.php');
+});
+
+
+// DEV: Show a list of access tokens
+
+if (APP_ENV != 'prod') {
+    $app->get('/admin/users', function() use ($app, $view) {
+        echo $view->render('admin/users.tpl.php', array(
+            'users' => $users = User::all()
+        ));
+    });
+}
+
 #
 # 404
 #
 echo $view->render('404.tpl.php');
 die;
+
+
+function activeUser($app) {
+    $token = $app->cookie->get('auth_token');
+    $user = User::findOneBy('authToken', $token);
+    if (!$user) {
+        $app->redirect('/');
+        die;
+    }
+
+    $user->renewAuthCookie($app->cookie);
+
+    return $user;
+}
