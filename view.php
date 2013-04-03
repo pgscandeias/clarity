@@ -3,14 +3,23 @@ class View
 {
     public $tpl_dir = '';
 
+    protected $vars = array();
+
+    public function assign($var, $value)
+    {
+        $this->vars[$var] = $value;
+        return $this;
+    }
+
     public function __construct($tpl_dir)
     {
         $this->tpl_dir = $tpl_dir;
     }
 
-    public function render($template, array $data = array())
+    public function render($template, array $vars = array())
     {
-        extract($data);
+        extract($vars);
+        extract($this->vars);
 
         ob_start();
         include $this->tpl_dir . $template;

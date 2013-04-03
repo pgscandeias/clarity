@@ -153,12 +153,17 @@ $app->post('/signup', function() use($app, $view) {
 });
 
 
+#
+# App
+#
+
 // App - Dashboard
 
 $app->get('/dashboard', function() use ($app, $view) {
     $user = activeUser($app);
 
     echo $view->render('app/dashboard.tpl.php', array(
+        'title' => $user->name,
         'user' => $user,
     ));
 });
@@ -206,6 +211,7 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
 
     echo $view->render('app/rooms/show.tpl.php', array(
+        'title' => $room->title,
         'user' => $user,
         'account' => $account,
         'room' => $room,
@@ -219,6 +225,7 @@ $app->get('/:slug', function($slug) use ($app, $view) {
     if (!$account || !$user->hasAccount($account)) die(show404($view));
 
     echo $view->render('app/rooms/index.tpl.php', array(
+        'title' => $account->name,
         'user' => $user,
         'account' => $account,
         'rooms' => $account->getRooms(),
@@ -226,7 +233,9 @@ $app->get('/:slug', function($slug) use ($app, $view) {
 });
 
 
-// DEV: Show a list of access tokens
+#
+# DEV: Show a list of access tokens
+#
 
 if (APP_ENV != 'prod') {
     $app->get('/admin/users', function() use ($app, $view) {
@@ -257,5 +266,7 @@ function activeUser($app) {
 
 function show404($view)
 {
-    return $view->render('404.tpl.php');
+    return $view->render('404.tpl.php', array(
+        'title' => 'Page Not Found',
+    ));
 }

@@ -3,7 +3,7 @@
     <head>
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400' rel='stylesheet' type='text/css'>
 
-        <title>Beautiful Team Chat | Clarity</title>
+        <title><?= @$title ? e($title) : 'Beautiful Team Chat' ?> | Clarity</title>
 
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
