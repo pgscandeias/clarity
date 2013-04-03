@@ -87,3 +87,15 @@
 form .controls {
     margin-bottom: 1em;
 }
+
+
+/**
+ * Rooms index
+ */
+
+.rooms-list a {
+    text-decoration: none;
+}
+.rooms-list .room-title {
+    text-decoration: underline;
+}

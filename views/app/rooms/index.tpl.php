@@ -25,8 +25,21 @@
     </p>
 </form>
 
-<? if (@$chats): ?>
-    chat index
+<? if (@$rooms): ?>
+    <ul class='rooms-list unstyled'>
+        <? foreach ($rooms as $r): ?>
+            <li>
+                <a href='/<?= $account->slug ?>/rooms/<?= $r->id ?>'>
+                    <strong class='room-title lead'><?= e($r->title) ?></strong>
+                    <br>
+                    <span class='updated'>
+                        last updated
+                        <?= date('Y-m-d H:i', strtotime($r->updated)) ?>
+                    </span>
+                </a>
+            </li>
+        <? endforeach ?>
+    </ul>
 
 <? else: ?>
     <p class='lead'>

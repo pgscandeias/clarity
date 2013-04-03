@@ -1,20 +1,9 @@
 <?php
 
 
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends BaseTestCase
 {
-    private $sampleData = array(
-        'name' => 'Pedro',
-        'email' => 'pgscandeias@gmail.com'
-    );
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->initDb();
-    }
-
-    private function initDb($loadFixtures = false)
+    protected function initDb($loadFixtures = false)
     {
         User::$db->exec(file_get_contents(APP_ROOT . '/schema.sql'));
 
@@ -24,25 +13,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
                 VALUES ("Pedro", "pgscandeias@gmail.com", "x", "x")
             ');
         }
-    }
-
-    private function createSampleUser()
-    {
-        $user = new User;
-        foreach ($this->sampleData as $f => $v) $user->{$f} = $v;
-        $user->save();
-
-        return $user;
-    }
-
-    private function createSampleAccount()
-    {
-        $account = new Account;
-        $account->name = 'ACME';
-        $account->generateSlug();
-        $account->save();
-
-        return $account;
     }
 
 
@@ -62,7 +32,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->createSampleUser();
 
-        $email = $this->sampleData['email'];
+        $email = $this->sampleUserData['email'];
         $user = User::findOneBy('email', $email);
         $this->assertInstanceOf('User', $user);
         $this->assertNotNull($user->id);
@@ -85,7 +55,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $dbUser = User::find($id);
         $this->assertInstanceOf('User', $user);
         $this->assertNotNull($user->id);
-        foreach ($this->sampleData as $f => $v) {
+        foreach ($this->sampleUserData as $f => $v) {
             $this->assertEquals($v, $dbUser->{$f});
         }
     }

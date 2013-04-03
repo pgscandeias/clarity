@@ -70,6 +70,9 @@ p {
 ul {
     margin-bottom: 2em;
 }
+li {
+    margin-bottom: 1em;
+}
 
 .unstyled {
     list-style: none;

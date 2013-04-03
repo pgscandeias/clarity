@@ -26,7 +26,35 @@ class Account extends AppModel
 
     public function getRooms()
     {
-        return array();
+        $rooms = array();
+
+        $q = '
+            SELECT r.*, u.id u_id, u.name u_name, u.email u_email
+            FROM '.Room::$_table.' r
+            JOIN '.User::$_table.' u on r.user_id = u.id
+            WHERE r.account_id = :aid
+            GROUP BY r.id
+            ORDER BY r.updated DESC, r.id DESC
+        ';
+
+        $sth = static::$db->prepare($q);
+        if ($sth->execute(array(':aid' => $this->id))) {
+            $rows = $sth->fetchAll(PDO::FETCH_OBJ);
+            foreach ($rows as $row) {
+                $room = new Room($row);
+                $room->account = $this;
+                $room->user = new User(array(
+                    'id' => $row->u_id,
+                    'name' => $row->u_name,
+                    'email' => $row->u_email,
+                ));
+                $rooms[] = $room;
+            }
+        } elseif (APP_ENV != 'prod') {
+            print_r($sth->errorInfo());die;
+        }
+
+        return $rooms;
     }
 }
 

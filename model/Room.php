@@ -5,6 +5,7 @@ class Room extends AppModel
     public static $_table = 'rooms';
     public static $_fields = array(
         'created',
+        'updated',
         'title',
         'description',
     );
@@ -30,12 +31,13 @@ class Room extends AppModel
 
         $params = array(
             ':created' => $this->created,
+            ':updated' => date('Y-m-d H:i:s'),
             ':title' => $this->title,
             ':description' => $this->description,
             ':account_id' => $this->account->id,
             ':user_id' => $this->user->id,
         );
-        $columns = array('created', 'title', 'description', 'account_id', 'user_id');
+        $columns = array('created', 'updated', 'title', 'description', 'account_id', 'user_id');
 
         if ($this->id) $this->update($params);
         else $this->insert($columns, $params);
