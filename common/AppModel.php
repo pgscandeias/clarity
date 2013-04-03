@@ -87,9 +87,13 @@ abstract class AppModel
         return $o;
     }
 
-    public function save()
+    // 'Room' model has its own save()
+    public function save($debug = false)
     {
-        if (empty(static::$_fields)) return;
+        if (empty(static::$_fields)) {
+            if (APP_ENV != 'prod') die('no fields');
+            else return;
+        }
 
         $params = $columns = array();
         foreach (static::$_fields as $field) {
@@ -100,12 +104,12 @@ abstract class AppModel
             $params[':'.$field] = $this->{$field};
         }
 
-        if ($this->id) $this->update($params);
-        else $this->insert($columns, $params);
+        if ($this->id) $this->update($params, $debug);
+        else $this->insert($columns, $params, $debug);
     }
 
 
-    protected function insert(array $columns, array $params)
+    protected function insert(array $columns, array $params, $debug = false)
     {
         $q = 'INSERT INTO '.static::$_table.' ('
            . implode(', ', $columns)
@@ -122,7 +126,7 @@ abstract class AppModel
         $this->id = static::$db->lastInsertId();
     }
 
-    protected function update(array $params)
+    protected function update(array $params, $debug = false)
     {
         $pairs = array();
         foreach ($params as $k=>$v) {

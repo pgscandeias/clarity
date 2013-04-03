@@ -26,8 +26,12 @@ class Room extends AppModel
 
     public function save()
     {
-        if (!$this->user instanceof User) return;
-        if (!$this->account instanceof Account) return;
+        if (!$this->user instanceof User) $error = 'no user set';
+        if (!$this->account instanceof Account) $error = 'no account set';
+        if (@$error) {
+            if (!isProduction()) throw new Exception($error);
+            return;
+        }
 
         $params = array(
             ':created' => $this->created,
@@ -45,7 +49,36 @@ class Room extends AppModel
 
     public static function get(Account $account, $id)
     {
-        $room = static::find($id);
-        if ($room && $room->account_id == $account->id) return $room;
+        $q = '
+            SELECT r.*, u.id u_id, u.name u_name, u.email u_email
+            FROM '.static::$_table.' r
+            JOIN '.User::$_table.' u on r.user_id = u.id
+            WHERE r.id = :id AND r.account_id = :aid
+        ';
+        $params = array(
+            ':id' => $id,
+            ':aid' => $account->id,
+        );
+        $sth = static::$db->prepare($q);
+        if (!$sth->execute($params)) return;
+
+        $row = $sth->fetch(PDO::FETCH_OBJ);
+        if (!$row) return;
+
+        $room = new static($row);
+        $room->id = $row->id;
+        $room->account = $account;
+        $room->user = new User(array(
+            'id' => $row->u_id,
+            'name' => $row->u_name,
+            'email' => $row->u_email,
+        ));
+
+        return $room;
+    }
+
+    public function url($absolute = false)
+    {
+        return $this->account->url($absolute) . '/rooms/' . $this->id;
     }
 }

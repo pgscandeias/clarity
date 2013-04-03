@@ -182,6 +182,21 @@ $app->post('/:slug/rooms/add', function($slug) use ($app, $view) {
     $app->redirect('/' . $account->slug . '/rooms/' . $room->id);
 });
 
+// Edit room
+$app->post('/:slug/rooms/:id/edit', function($slug, $id) use ($app, $view) {
+    $user = activeUser($app);
+    $account = Account::findOneBy('slug', $slug);
+    $room = Room::get($account, $id);
+
+    if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
+
+    $room->title = $app->request->post('title');
+    $room->description = $app->request->post('description');
+    $room->save();
+
+    $app->redirect($room->url());
+});
+
 // Show room
 $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     $user = activeUser($app);

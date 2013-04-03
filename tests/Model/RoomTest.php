@@ -27,6 +27,19 @@ class RoomTest extends \PHPUnit_Framework_TestCase
         Room::$db->exec(file_get_contents(APP_ROOT . '/schema.sql'));
     }
 
+    private function createRoom($user, $account, $title, $description)
+    {
+        $room = new Room;
+        $room->account = $account;
+        $room->user = $user;
+        $room->title = 'Test title';
+        $room->description = 'Test description';
+        $room->save();
+        $this->assertNotNull($room->id);
+
+        return $room;
+    }
+
     public function testLoaded()
     {
         $room = new Room;
@@ -45,13 +58,7 @@ class RoomTest extends \PHPUnit_Framework_TestCase
         $account = $this->account;
         $user = $this->user;
 
-        $room = new Room;
-        $room->account = $account;
-        $room->user = $user;
-        $room->title = 'Test title';
-        $room->description = 'Test description';
-        $room->save();
-        $this->assertNotNull($room->id);
+        $room = $this->createRoom($user, $account, 'Test title', 'Test description');
 
         $dbRoom = Room::find($room->id);
         $this->assertInstanceOf('Room', $dbRoom);
@@ -66,16 +73,29 @@ class RoomTest extends \PHPUnit_Framework_TestCase
         $account = $this->account;
         $user = $this->user;
 
-        $room = new Room;
-        $room->account = $account;
-        $room->user = $user;
-        $room->title = 'Test title';
-        $room->description = 'Test description';
-        $room->save();
-        $this->assertNotNull($room->id);
+        $room = $this->createRoom($user, $account, 'Test title', 'Test description');
 
         $dbRoom = Room::get($account, $room->id);
         $this->assertInstanceOf('Room', $dbRoom);
-        $this->assertEquals($account->id, $dbRoom->account_id);
+        $this->assertEquals($account, $dbRoom->account);
+    }
+
+    public function testEdit()
+    {
+        $account = $this->account;
+        $user = $this->user;
+
+        $room = $this->createRoom($user, $account, 'Test title', 'Test description');
+
+        $dbRoom = Room::get($account, $room->id);
+        $this->assertNotNull($dbRoom);
+
+        $dbRoom->title = 'New title';
+        $dbRoom->description = 'New description';
+        $dbRoom->save();
+
+        $updatedRoom = Room::get($account, $room->id);
+        $this->assertEquals('New title', $updatedRoom->title);
+        $this->assertEquals('New description', $updatedRoom->description);
     }
 }

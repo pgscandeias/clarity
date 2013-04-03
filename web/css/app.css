@@ -108,3 +108,11 @@ form .controls {
 .rooms-list .room-title {
     text-decoration: underline;
 }
+
+
+/**
+ * Chat Room
+ */
+.room-header .tools-top {
+    float: right;
+}

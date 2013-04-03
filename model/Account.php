@@ -24,7 +24,7 @@ class Account extends AppModel
         }
     }
 
-    public function link($absolute = false)
+    public function url($absolute = false)
     {
         $link = '/' . $this->slug;
         if ($absolute) $link = PROTOCOL . '://'.$_SERVER['HTTP_HOST'] . $link;

@@ -180,3 +180,8 @@ class Mail {
 // use Halt-Exception instead of exit;
 class Halt extends Exception {}
 
+// Check production environment
+function isProduction()
+{
+  return APP_ENV == 'prod';
+}

@@ -18,7 +18,7 @@
             <div class='container'>
                 <nav class='nav-main inline lead'>
                     <? if (@$account): ?>
-                        <a href='<?= $account->link() ?>'><?= e($account->name) ?></a>
+                        <a href='<?= $account->url() ?>'><?= e($account->name) ?></a>
 
                     <? else: ?>
                         Clarity
