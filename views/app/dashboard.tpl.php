@@ -5,7 +5,7 @@
 <ul>
     <? foreach ($user->getAccounts() as $a): ?>
     <li>
-        <a href='/<?= $a->slug ?>'><?= $a->name ?></a>
+        <a href='/<?= $a->slug ?>'><?= e($a->name) ?></a>
     </li>
     <? endforeach ?>
 </ul>

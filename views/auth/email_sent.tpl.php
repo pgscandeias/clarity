@@ -7,7 +7,7 @@
 
     <p>
         We just sent an access link to
-        <strong><?= $email ?></strong>.
+        <strong><?= e($email) ?></strong>.
         <br>
         Please check your email and click on it to enter.
     </p>

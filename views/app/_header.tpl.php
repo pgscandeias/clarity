@@ -17,7 +17,7 @@
         <div class='title'>
             <div class='container'>
                 <nav class='nav-main inline lead'>
-                    <?= @$account ? $account->name : 'Clarity' ?>
+                    <?= @$account ? e($account->name) : 'Clarity' ?>
                 </nav>
 
                 <nav class='nav-user inline'>

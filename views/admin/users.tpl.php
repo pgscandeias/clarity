@@ -4,7 +4,7 @@
 <? foreach ($users as $u): ?>
     <li>
         #<?= $u->id ?>
-        <?= $u->name; ?>
+        <?= e($u->name); ?>
         <a href='/auth?t=<?= $u->authToken ?>'><?= $u->authToken ?></a>
     </li>
 <? endforeach; ?>

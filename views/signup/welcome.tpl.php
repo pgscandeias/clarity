@@ -5,7 +5,7 @@
 
     <p>
         Please check your inbox at
-        <strong><?= $email ?></strong>
+        <strong><?= e($email) ?></strong>
         <br>
         and click on the activation link.
     </p>
