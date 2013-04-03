@@ -21,12 +21,7 @@
                 </nav>
 
                 <nav class='nav-user inline'>
-                    <ul class='unstyled inline'>
-                        <li><a href='/dashboard'>Dashboard</a></li>
-                        <li><a href='/settings'>Settings</a></li>
-                        <li><a href='/logout'>Logout</a></li>
-                        <li><img class='avatar' src='<?= $user->gravatar(50) ?>'></li>
-                    </ul>
+                    <a href='/dashboard'><img class='avatar' src='<?= $user->gravatar(50) ?>'></a>
                 </nav>
             </div>
         </div>

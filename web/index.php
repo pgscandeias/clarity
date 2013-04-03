@@ -164,7 +164,7 @@ $app->get('/dashboard', function() use ($app, $view) {
 });
 
 
-// App - rooms
+// App - Rooms
 
 $app->post('/:slug/rooms/add', function($slug) use ($app, $view) {
     $user = activeUser($app);
