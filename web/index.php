@@ -171,8 +171,24 @@ $app->post('/:slug/rooms/add', function($slug) use ($app, $view) {
     $account = Account::findOneBy('slug', $slug);
     if (!$account || !$user->hasAccount($account)) die(show404($view));
 
-    var_dump($_POST);
-    die;
+    $room = new Room;
+    $room->user = $user;
+    $room->account = $account;
+    $room->title = $app->request->post('title');
+    $room->description = $app->request->post('description');
+    $room->save();
+
+    $app->redirect('/' . $account->slug . '/rooms/' . $room->id);
+});
+
+$app->post('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
+    $user = activeUser($app);
+    $account = Account::findOneBy('slug', $slug);
+    $room = Room::get($account, $id);
+
+    if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
+
+
 });
 
 $app->get('/:slug/rooms', function($slug) use ($app, $view) {

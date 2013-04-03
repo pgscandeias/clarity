@@ -40,4 +40,10 @@ class Room extends AppModel
         if ($this->id) $this->update($params);
         else $this->insert($columns, $params);
     }
+
+    public static function get(Account $account, $id)
+    {
+        $room = static::find($id);
+        if ($room && $room->account_id == $account->id) return $room;
+    }
 }
