@@ -166,6 +166,7 @@ $app->get('/dashboard', function() use ($app, $view) {
 
 // App - rooms
 
+// Create room
 $app->post('/:slug/rooms/add', function($slug) use ($app, $view) {
     $user = activeUser($app);
     $account = Account::findOneBy('slug', $slug);
@@ -181,20 +182,22 @@ $app->post('/:slug/rooms/add', function($slug) use ($app, $view) {
     $app->redirect('/' . $account->slug . '/rooms/' . $room->id);
 });
 
-$app->post('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
+// Show room
+$app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     $user = activeUser($app);
     $account = Account::findOneBy('slug', $slug);
     $room = Room::get($account, $id);
 
     if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
 
-
+    echo $view->render('app/rooms/show.tpl.php', array(
+        'user' => $user,
+        'account' => $account,
+        'room' => $room,
+    ));
 });
 
-$app->get('/:slug/rooms', function($slug) use ($app, $view) {
-    echo "rooms";
-});
-
+// List rooms
 $app->get('/:slug', function($slug) use ($app, $view) {
     $user = activeUser($app);
     $account = Account::findOneBy('slug', $slug);
