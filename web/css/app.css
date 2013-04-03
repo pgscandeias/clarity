@@ -28,6 +28,15 @@
     float: left;
 }
 
+.nav-main a {
+    color: #ddd;
+    text-decoration: none;
+}
+.nav-main a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
 .nav-main small {
     color: #999;
 }

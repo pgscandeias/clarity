@@ -40,7 +40,7 @@ $app->get('/login', function() use ($view) {
 $app->post('/login', function() use ($app, $view) {
     $email = (string) $app->request->post('email');
     $token = User::generateToken();
-    $link = 'http://'.$_SERVER['HTTP_HOST'].'/auth?t='.$token;
+    $link = PROTOCOL . '://'.$_SERVER['HTTP_HOST'].'/auth?t='.$token;
 
     $user = User::findOneBy('email', $email);
     if ($user) {

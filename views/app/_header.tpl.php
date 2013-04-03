@@ -17,7 +17,13 @@
         <div class='title'>
             <div class='container'>
                 <nav class='nav-main inline lead'>
-                    <?= @$account ? e($account->name) : 'Clarity' ?>
+                    <? if (@$account): ?>
+                        <a href='<?= $account->link() ?>'><?= e($account->name) ?></a>
+
+                    <? else: ?>
+                        Clarity
+
+                    <? endif ?>
                 </nav>
 
                 <nav class='nav-user inline'>

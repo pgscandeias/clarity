@@ -12,6 +12,10 @@ if (!defined('APP_ENV')) {
 }
 Config::_init(__DIR__ . '/config.'.APP_ENV.'.ini');
 
+# Configuration - Protocol
+if (APP_ENV == 'prod') define('PROTOCOL', 'https');
+else define('PROTOCOL', 'http');
+
 # Error reporting
 if (Config::get('environment') != 'prod') {
     error_reporting(E_ALL);

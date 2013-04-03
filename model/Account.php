@@ -24,6 +24,14 @@ class Account extends AppModel
         }
     }
 
+    public function link($absolute = false)
+    {
+        $link = '/' . $this->slug;
+        if ($absolute) $link = PROTOCOL . '://'.$_SERVER['HTTP_HOST'] . $link;
+
+        return $link;
+    }
+
     public function getRooms()
     {
         $rooms = array();
