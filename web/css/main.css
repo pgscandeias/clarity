@@ -67,12 +67,16 @@ p {
 /**
  * Lists
  */
+ul {
+    margin-bottom: 2em;
+}
 
 .unstyled {
     list-style: none;
 }
 
 .inline, .inline li {
+    margin-bottom: 0;
     display: inline-block;
 }
 
