@@ -1,15 +1,14 @@
 <? include '_header.tpl.php' ?>
 
+<p class='tools-top'>
+    <a href='/settings'>Settings</a>
+    <a href='/logout'>Log out (end session)</a>
+</p>
+
 <h3>
     <?= e($user->name) ?>
     <small>'s dashboard</small>
 </h3>
-
-<h4>Options</h4>
-<ul class='unstyled'>
-    <li><a href='/settings'>Settings</a></li>
-    <li><a href='/logout'>Log out (end session)</a></li>
-</ul>
 
 <h4>Accounts</h4>
 <ul>

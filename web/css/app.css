@@ -61,12 +61,15 @@
 .tools-top {
     text-align: right;
 }
-
-.tools-top .room-create {
-    color: green;
+.tools-top a {
+    display: inline-block;
+    color: #050;
     font-weight: 400;
+    padding: 0 1em;
 }
-
+.tools-top a:last-child {
+    padding-right: 0;
+}
 .tools-top a:hover {
     color: #000;
 }
