@@ -95,10 +95,29 @@ class User extends AppModel
 
     public function gravatar($size = 50)
     {
-        return "https://www.gravatar.com/avatar/"
-               . md5($this->email)
-               . "?s=" . $size
-        ;
+        $this->cacheGravatar($size);
+
+        return '/avatar/' . md5($this->email) . '/' . $size;
+    }
+
+    private function cacheGravatar($size)
+    {
+        $cacheDir = static::gravatarCachePath() . '/'.md5($this->email);
+        $cachePath = $cacheDir . '/' . $size;
+
+        if (!file_exists($cachePath)) {
+            mkdir($cacheDir);
+            $gravatarUrl = "https://www.gravatar.com/avatar/"
+                         . md5($this->email)
+                         . "?s=" . $size
+            ;
+            file_put_contents($cachePath, file_get_contents($gravatarUrl));
+        }
+    }
+
+    public static function gravatarCachePath()
+    {
+        return APP_ROOT . '/cache/gravatar';
     }
 
     public static function getByAuthCookie(Cookie $cookie)

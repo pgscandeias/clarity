@@ -157,6 +157,17 @@ $app->post('/signup', function() use($app, $view) {
 # App
 #
 
+// Avatar
+$app->get('/avatar/:hash/:size', function($hash, $size) use ($app, $view) {
+    $filePath = User::gravatarCachePath() . '/' . $hash . '/' . $size;
+    $info = @getimagesize($filePath);
+    if (!$info) die(show404($view));
+
+    header('Content-type: ' . $info['mime']);
+    die(file_get_contents($filePath));
+});
+
+
 // App - Dashboard
 
 $app->get('/dashboard', function() use ($app, $view) {
@@ -266,6 +277,7 @@ function activeUser($app) {
 
 function show404($view)
 {
+    header("HTTP/1.1 404 Not Found");
     return $view->render('404.tpl.php', array(
         'title' => 'Page Not Found',
     ));
