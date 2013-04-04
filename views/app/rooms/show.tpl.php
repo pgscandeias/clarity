@@ -23,6 +23,12 @@
     </div>
 </form>
 
+<ul class='chat'>
+    <? for ($i=0; $i<100; $i++): ?>
+    <li>Chat <?= uniqid() ?></li>
+    <? endfor ?>
+</ul>
+
 
 <script src="/js/rooms.show.js"></script>
 <? include __DIR__ . '/../_footer.tpl.php' ?>

@@ -222,6 +222,7 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
 
     echo $view->render('app/rooms/show.tpl.php', array(
+        'body' => 'chat-room',
         'title' => $room->title,
         'user' => $user,
         'account' => $account,

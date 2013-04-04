@@ -8,4 +8,6 @@ $(function(){
     $("a.room-cancel").click(function() {
         $(".form-room-edit").slideUp();
     });
+
+    $(window).scrollTop(99999);
 });

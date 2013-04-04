@@ -13,7 +13,7 @@
         <script src='/js/jquery-1.9.1.min.js'></script>
     </head>
 
-    <body>
+    <body class='<?= @$body ?>'>
         <div class='title'>
             <div class='container'>
                 <nav class='nav-main inline lead'>
