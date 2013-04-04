@@ -58,4 +58,13 @@ class RouterTest extends PHPUnit_Framework_TestCase
                                 '/users/login/remember'
                             ));
     }
+
+    public function testPathRemovesQueryString()
+    {
+        $noqs   = '/ethethethe/pethethethe';
+        $qs     = $noqs . '?qs=chriswaddle';
+        
+
+        $this->assertEquals($noqs, Router::path($qs));
+    }
 }

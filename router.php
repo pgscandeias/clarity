@@ -14,7 +14,9 @@ class Router
             'arguments' => array(),
         );
 
-        if ($url == $pattern) {
+        $path = static::path($url);
+
+        if ($path == $pattern) {
             $return['match'] = true;
             return $return;
         }
@@ -26,7 +28,7 @@ class Router
         if (substr($pattern,-1)==='/') $regex .= '?';
 
         // extract parameter values from URL if route matches the current request
-        if (!preg_match('#^'.$regex.'$#', $url, $values)) {
+        if (!preg_match('#^'.$regex.'$#', $path, $values)) {
           return;
         }
         // extract parameter names from URL
@@ -40,5 +42,11 @@ class Router
             'match' => true,
             'arguments' => $args
         );
+    }
+
+    public static function path($url)
+    {
+        $parts = parse_url($url);
+        return $parts['path'];
     }
 }

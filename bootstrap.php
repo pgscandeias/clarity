@@ -32,7 +32,7 @@ require_once APP_ROOT . '/view.php';
 
 # Business
 require_once APP_ROOT . '/Common/AppModel.php';
-$models = array('User', 'Account', 'Role', 'Room');
+$models = array('User', 'Account', 'Role', 'Room', 'Message');
 foreach ($models as $m) {
     require_once APP_ROOT . "/model/$m.php";
 }
