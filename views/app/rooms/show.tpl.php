@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<form action='/<?= $account->slug ?>/rooms/<?= $room->id ?>/edit' method='post' class='form-room-edit form-block' style='display: none;'>
+<form action='/<?= $account->slug ?>/rooms/<?= $room->id ?>/edit' method='post' class='form-room form-room-edit form-block' style='display: none;'>
     <label>Room title</label>
     <input type='text' name='title' value='<?= e($room->title) ?>'>
 

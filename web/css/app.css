@@ -152,6 +152,12 @@ form .controls {
     padding-bottom: 0.5em;
     background: #eee;
 }
+.form-room {
+    position: fixed;
+    top: 5em;
+    right: 1em;
+    z-index: 13;
+}
 
 
 /**

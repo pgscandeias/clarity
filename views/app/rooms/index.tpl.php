@@ -4,7 +4,7 @@
     <a href='#' class='room-create'>Create new chat room</a>
 </p>
 
-<form action='/<?= $account->slug ?>/rooms/add' method='post' class='form-room-create form-block' style='display: none;'>
+<form action='/<?= $account->slug ?>/rooms/add' method='post' class='form-room form-room-create form-block' style='display: none;'>
     <label>Room title</label>
     <input type='text' name='title'>
 
