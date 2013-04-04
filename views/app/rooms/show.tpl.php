@@ -24,6 +24,7 @@
 </form>
 
 <ul id='chat' class='chat'></ul>
+<center id='chatFooter'>*</center>
 
 
 <script>var room = <?= $room->id ?>;</script>

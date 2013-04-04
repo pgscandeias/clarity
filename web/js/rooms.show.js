@@ -1,3 +1,5 @@
+var scrolling = false;
+
 $(function(){
     $("a[href=#]").click(function(e) { e.preventDefault(); });
 
@@ -7,6 +9,11 @@ $(function(){
     });
     $("a.room-cancel").click(function() {
         $(".form-room-edit").slideUp();
+    });
+
+    $(document).on('scroll', function() {
+        scrolling = true;
+        if (inView($("#chatFooter"))) scrolling = false;
     });
 
     timestamp = 0;
@@ -25,7 +32,9 @@ function loadNewMessages(since)
         $.each(data.messages, function(i, m) {
             // messages are pre-rendered
             $("#chat").append(m);
-            scrollDown();
+
+            // keep up with messages unless looking at something
+            if (!scrolling) scrollDown();
         });
     });
 }
@@ -34,4 +43,15 @@ function scrollDown()
 {
     $(window).scrollTop(99999);
     // $('window').animate({scrollTop: 99999}, 800);
+}
+
+function inView(elem)
+{
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom));
 }
