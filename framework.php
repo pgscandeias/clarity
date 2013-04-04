@@ -113,8 +113,8 @@ class Cookie {
   public $expire = 0;
   public $path = '/';
   public $domain = false;
-  public $secure = false; // XXX This needs SSL/TLS. Get it.
-  public $httponly = true;
+  public $secure = false;   // Must be true in production (use TLS)
+  public $httponly = true;  // Should never be false
 
   public function __construct()
   {

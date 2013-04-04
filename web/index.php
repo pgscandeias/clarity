@@ -231,7 +231,7 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
 
     // XXX: Generate a chat using lines from Apple's Think Different commercial
     $since = $app->request->get('since');
-    $lines = $since ? $i = rand(0,10) > 7 ? rand(1,2) : 0 : 200;
+    $lines = $since ? $i = rand(0,10) > 3 ? rand(1,2) : 0 : 200;
     $response = array(
         'timestamp' => time(),
         'messages' => array(),

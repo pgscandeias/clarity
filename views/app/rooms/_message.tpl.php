@@ -1,6 +1,11 @@
 <li class='room-message'>
-    <span class='user'><?= e($m->user->name) ?></span>
-    <span class='date'><?= $m->created ?></span>
-    :
-    <?= nl2br(e($m->message)) ?>
+    <img 
+        class='avatar' 
+        src='<?= $m->user->gravatar(24) ?>'
+        alt='<?= e($m->user->name) ?>'
+        title='<?= e($m->user->name) ?>'
+    >
+    <span class='date'><?= date('H:i', strtotime($m->created)) ?></span>
+
+    <span class='message'><?= nl2br(e($m->message)) ?></span>
 </li>

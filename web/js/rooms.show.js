@@ -10,7 +10,8 @@ $(function(){
     });
 
     timestamp = 0;
-    window.setInterval("loadNewMessages(timestamp)", 2500);
+    loadNewMessages(timestamp);
+    window.setInterval("loadNewMessages(timestamp)", 2000);
 });
 
 
@@ -32,4 +33,5 @@ function loadNewMessages(since)
 function scrollDown()
 {
     $(window).scrollTop(99999);
+    // $('window').animate({scrollTop: 99999}, 800);
 }

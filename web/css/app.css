@@ -143,3 +143,31 @@ form .controls {
     padding-bottom: 0.5em;
     background: #eee;
 }
+
+
+/**
+ * Chat room messages
+ */
+.chat {
+    padding: 0.25em;
+}
+.chat .room-message {
+    border-top: 1px dotted #fff;
+    margin: 0 0 0.25em;
+    padding: 0.25em 0;
+}
+.chat .room-message:last-child {
+    border-top: none;
+}
+.chat .room-message .avatar {
+    vertical-align: middle;
+    margin-right: 0.5em;
+}
+.chat .room-message .date {
+    font-size: 0.6em;
+    float: right;
+    color: #777;
+}
+.chat .room-message .message {
+    color: #000;
+}
