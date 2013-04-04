@@ -153,8 +153,8 @@ form .controls {
 }
 .chat .room-message {
     border-top: 1px dotted #fff;
-    margin: 0 0 0.25em;
-    padding: 0.25em 0;
+    margin: 0;
+    padding: 0.15em 0 0.3333em;
 }
 .chat .room-message:last-child {
     border-top: none;
@@ -170,4 +170,8 @@ form .controls {
 }
 .chat .room-message .message {
     color: #000;
+}
+
+.chat .my-msg {
+    background: #ddd;
 }

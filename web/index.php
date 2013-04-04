@@ -240,13 +240,26 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
         $txt = "Here’s to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They’re not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. But the only thing you can’t do is ignore them. Because they change things. They push the human race forward. While some may see them as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do.";
         $strings = explode('.', $txt);
 
+        $dummies = array(
+            'dummy1@threddie.com' => 'Jim Raynor',
+            'dummy2@threddie.com' => 'Sarah Kerrigan',
+            'dummy3@threddie.com' => 'Zeratul',
+            'dummy4@threddie.com' => 'Arcturus Mengsk',
+        );
+        @$users[] = $user;
+        foreach ($dummies as $email => $name) {
+            $users[] = new User(array('email' => $email, 'name' => $name));
+        }
         $m = new Message(array(
             'id' => $i+1,
-            'user' => $user,
+            'user' => $users[rand(0, count($users)-1)],
             'room' => $room->id,
             'message' => trim($strings[rand(0, count($strings) - 1)]),
         ));
-        $response['messages'][] = $view->render('app/rooms/_message.tpl.php', array('m' => $m));
+        $response['messages'][] = $view->render('app/rooms/_message.tpl.php', array(
+            'my' => $user,
+            'm' => $m
+        ));
     }
 
 

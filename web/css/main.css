@@ -163,6 +163,9 @@ footer {
     margin: 5em 0 2em;
 }
 
+.round {
+    border-radius: 100px;
+}
 
 /**
  * Header

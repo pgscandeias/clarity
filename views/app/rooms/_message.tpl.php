@@ -1,4 +1,4 @@
-<li class='room-message'>
+<li class='room-message <?= $m->user->email == $my->email ? 'my-msg' : '' ?>'>
     <img 
         class='avatar' 
         src='<?= $m->user->gravatar(24) ?>'
