@@ -1,12 +1,14 @@
 <? include __DIR__ . '/../_header.tpl.php' ?>
 
 <div class='room-header'>
-    <p class='tools-top'>
-        <a href='#' class='room-edit'>Change settings</a>
-    </p>
+    <div class='inner-container'>
+        <p class='tools-top'>
+            <a href='#' class='room-edit'>Change settings</a>
+        </p>
 
-    <strong class='room-title lead'><?= e($room->title) ?></strong>
-    <p class='room-description'><?= nl2br(e($room->description)) ?></p>
+        <strong class='room-title lead'><?= e($room->title) ?></strong>
+        <p class='room-description'><?= nl2br(e($room->description)) ?></p>
+    </div>
 </div>
 
 <form action='/<?= $account->slug ?>/rooms/<?= $room->id ?>/edit' method='post' class='form-room-edit form-block' style='display: none;'>
@@ -23,7 +25,7 @@
     </div>
 </form>
 
-<ul id='chat' class='chat'></ul>
+<ul id='chat' class='chat unstyled'></ul>
 <center id='chatFooter'>*</center>
 
 

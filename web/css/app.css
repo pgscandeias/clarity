@@ -8,6 +8,10 @@
     width: auto;
 }
 
+.inner-container {
+    margin: 0 1em;
+}
+
 
 /**
  * Navigation
@@ -118,6 +122,10 @@ form .controls {
 .room-header .tools-top {
     float: right;
 }
+.chat-room .container {
+    width: 100%;
+    margin: 0;
+}
 .chat-room .chat {
     padding: 5em 0 1em;
 }
@@ -128,8 +136,9 @@ form .controls {
 }
 .chat-room .room-header {
     position: fixed;
+    display: block;
     z-index: 8;
-    margin-right: 1em;
+    width: 100%;
     margin-top: 2.5em;
     padding-top: 0.1em;
     background: #eee;
@@ -150,11 +159,12 @@ form .controls {
  */
 .chat {
     padding: 0.25em;
+    background: #eee;
 }
 .chat .room-message {
     border-top: 1px dotted #fff;
     margin: 0;
-    padding: 0.15em 0 0.3333em;
+    padding: 0.15em 1em 0.3333em;
 }
 .chat .room-message:last-child {
     border-top: none;
@@ -173,5 +183,5 @@ form .controls {
 }
 
 .chat .my-msg {
-    background: #ddd;
+    background: #f9f9f9;
 }
