@@ -31,8 +31,8 @@
             <li>
                 <a href='/<?= $account->slug ?>/rooms/<?= $r->id ?>'>
                     <strong class='room-title lead'><?= e($r->title) ?></strong>
-                    <br>
-                    <span class='updated'>
+                    <p class='room-description'><?= nl2br(e($r->description)) ?></p>
+                    <span class='room-updated'>
                         last updated
                         <?= date('Y-m-d H:i', strtotime($r->updated)) ?>
                     </span>

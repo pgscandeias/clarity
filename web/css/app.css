@@ -110,9 +110,21 @@ form .controls {
 
 .rooms-list a {
     text-decoration: none;
+    display: block;
+}
+.rooms-list a:hover {
+    background: #ddd;
 }
 .rooms-list .room-title {
+    color: #111;
     text-decoration: underline;
+}
+.rooms-list .room-description {
+    margin: 0;
+    color: #222;
+}
+.rooms-list .room-updated {
+    font-size: 0.8em;
 }
 
 
