@@ -6,7 +6,7 @@
 
         <script>
             var timestamp = <?= time() ?>,
-                account = '<?= $account->slug ?>'
+                account = '<?= @$account->slug ?>'
             ;
         </script>
     </body>
