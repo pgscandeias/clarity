@@ -119,6 +119,7 @@ class Cookie {
   public function __construct()
   {
     $this->domain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : false;
+    $this->secure = APP_ENV == 'prod';
   }
 
   public static function generate()
