@@ -23,11 +23,7 @@
     </div>
 </form>
 
-<ul class='chat'>
-    <? for ($i=0; $i<100; $i++): ?>
-    <li>Chat <?= uniqid() ?></li>
-    <? endfor ?>
-</ul>
+<ul id='chat' class='chat'></ul>
 
 
 <script src="/js/rooms.show.js"></script>

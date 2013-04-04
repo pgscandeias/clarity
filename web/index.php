@@ -214,11 +214,7 @@ $app->post('/:slug/rooms/:id/edit', function($slug, $id) use ($app, $view) {
 });
 
 // Show room
-// $app->get('/:slug/rooms/:id', function($slug, $id, $format = null) use ($app, $view) {
-    
-// });
 $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
-    var_dump($id);die;
     $idFragments = explode('.', $id);
     if (count($idFragments) == 1) {
         $id = $idFragments[0];
@@ -236,15 +232,16 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     // XXX: Generate a chat using lines from Apple's Think Different commercial
     $since = $app->request->get('since');
     $lines = $since ? rand(0,3) : 200;
+    $messages = array();
     for ($i=0; $i<$lines; $i++) {
         $txt = "Here’s to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They’re not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. But the only thing you can’t do is ignore them. Because they change things. They push the human race forward. While some may see them as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do.";
         $strings = explode('.', $txt);
 
-        @$messages[] = new Message(array(
+        $messages[] = new Message(array(
             'id' => $i+1,
             'user' => $user,
             'room' => $room->id,
-            'message' => trim($strings[rand(0, count($strings))]),
+            'message' => trim($strings[rand(0, count($strings) - 1)]),
         ));
     }
 
