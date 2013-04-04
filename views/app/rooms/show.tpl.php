@@ -26,5 +26,6 @@
 <ul id='chat' class='chat'></ul>
 
 
+<script>var room = <?= $room->id ?>;</script>
 <script src="/js/rooms.show.js"></script>
 <? include __DIR__ . '/../_footer.tpl.php' ?>
