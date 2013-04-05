@@ -137,4 +137,19 @@ class User extends AppModel
     {
         return static::findOneBy('authToken', $cookie->get('auth_token'));
     }
+
+    public function shortName()
+    {
+        $names = explode(' ', $this->name);
+
+        $firstName = array_shift($names);
+
+        $callback = function($name) {
+            return strtoupper($name[0]).'.';
+        };
+
+        $remainingNames = implode('', array_map($callback, $names));
+
+        return trim(implode(' ', array_merge(array($firstName), array($remainingNames))));
+    }
 }

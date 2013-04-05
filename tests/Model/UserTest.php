@@ -177,4 +177,21 @@ class UserTest extends BaseTestCase
             $this->assertEquals($user->name, $udata[$k]['name'] . $k);
         }
     }
+
+    public function testShortName()
+    {
+        $user = new User;
+
+        $user->name = 'Passos';
+        $this->assertEquals('Passos', $user->shortName());
+
+        $user->name = 'Passos Dias';
+        $this->assertEquals('Passos D.', $user->shortName());
+
+        $user->name = 'Passos Dias Aguiar';
+        $this->assertEquals('Passos D.A.', $user->shortName());
+
+        $user->name = 'Passos Dias Aguiar de Mota';
+        $this->assertEquals('Passos D.A.D.M.', $user->shortName());
+    }
 }

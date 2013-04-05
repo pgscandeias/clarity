@@ -3,7 +3,7 @@
         class='avatar' 
         src='<?= $m->user->gravatar(24) ?>'
         alt='<?= e($m->user->name) ?>'
-        title='<?= e($m->user->name) ?>'
+        title='<?= e($m->user->shortName()) ?>'
     >
     <span class='date'><?= date('H:i', strtotime($m->created)) ?></span>
 
