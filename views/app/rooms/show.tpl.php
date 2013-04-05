@@ -25,7 +25,7 @@
     </div>
 </form>
 
-<ul id='chat' class='chat unstyled'></ul>
+<table border='1' id='chat' class='chat unstyled'></table>
 <center id='chatFooter'>*</center>
 
 
