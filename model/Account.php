@@ -64,6 +64,31 @@ class Account extends AppModel
 
         return $rooms;
     }
+
+    public function getUsers()
+    {
+        $q = '
+            SELECT u.*, r.role
+            FROM '.User::$_table.' u
+            JOIN '.Role::$_table.' r on r.user_id = u.id
+            WHERE r.account_id = :aid
+            GROUP BY u.id
+            ORDER BY u.name ASC
+        ';
+
+        $users = array();
+        $sth = static::$db->prepare($q);
+        if ($sth->execute(array(':aid' => $this->id))) {
+            $rows = $sth->fetchAll(PDO::FETCH_OBJ);
+            foreach ($rows as $row) {
+                $users[] = new User($row);
+            }
+        } elseif (APP_ENV != 'prod') {
+            print_r($sth->errorInfo());die;
+        }
+
+        return $users;
+    }
 }
 
 function slugify($string, $space = "-") {

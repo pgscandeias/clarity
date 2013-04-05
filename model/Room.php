@@ -77,20 +77,24 @@ class Room extends AppModel
         return $room;
     }
 
-    public function getMessages()
+    public function getMessages($since = 0)
     {
         $q = '
             SELECT m.*, u.id u_id, u.name u_name, u.email u_email
             FROM '.Message::$_table.' m
             JOIN '.User::$_table.' u on m.user_id = u.id
-            WHERE m.room_id = :rid
+            WHERE m.room_id = :rid AND m.created > :since
             GROUP BY m.id
             ORDER BY m.id ASC
         ';
 
         $messages = array();
         $sth = static::$db->prepare($q);
-        if ($sth->execute(array(':rid' => $this->id))) {
+        $params = array(
+            ':rid' => $this->id, 
+            ':since' => date('Y-m-d H:i:s', (int) $since)
+        );
+        if ($sth->execute($params)) {
             $rows = $sth->fetchAll(PDO::FETCH_OBJ);
             foreach ($rows as $row) {
                 $msg = new Message($row);

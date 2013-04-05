@@ -3,13 +3,38 @@
 
 class AccountTest extends BaseTestCase
 {
+    private function createUserForAccount($name, $email, $account)
+    {
+        $u = new User;
+        $u->email = $email;
+        $u->name = $name;
+        $u->save();
+        $u->addAccount($account);
+        $this->assertNotNull($u->id);
+
+        return $u;
+    }
+
+    private function checkUserAgainstDummy(User $user, $dummies, $k)
+    {
+        $this->assertInstanceOf('User', $user);
+        $i=0;
+        foreach ($dummies as $email => $name) {
+            if ($i == $k) {
+                $this->assertEquals($name, $user->name);
+                $this->assertEquals($email, $user->email);
+                break;
+            }
+        }
+    }
+
+
     public function testLoaded()
     {
         $a = new Account;
         $this->assertInstanceOf('Account', $a);
     }
 
-    // XXX: Move this to the RoomTest
     public function testGetRooms()
     {
         $u = $this->createSampleUser();
@@ -37,6 +62,28 @@ class AccountTest extends BaseTestCase
             $this->assertEquals($u->name, $room->user->name);
             $this->assertEquals($u->email, $room->user->email);
             $this->assertEquals($a, $room->account);
+        }
+    }
+
+    public function testGetUsers()
+    {
+        $account = $this->createSampleAccount();
+        $dummies = array(
+            'dummy1@threddie.com' => 'Jim Raynor',
+            'dummy2@threddie.com' => 'Sarah Kerrigan',
+            'dummy3@threddie.com' => 'Zeratul',
+            'dummy4@threddie.com' => 'Arcturus Mengsk',
+        );
+        sort($dummies);
+
+        foreach ($dummies as $email => $name) {
+            $this->createUserForAccount($name, $email, $account);
+        }
+
+        $users = $account->getUsers();
+        $this->assertEquals(count($dummies), count($users));
+        foreach ($users as $k=>$user) {
+            $this->checkUserAgainstDummy($user, $dummies, $k);
         }
     }
 }

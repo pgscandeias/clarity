@@ -90,8 +90,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase
             $this->assertNotNull($m->created);
         }
 
-        // Messages are retrieved indirectly from the Room
-        $messages = $this->room->getMessages();
+        // Messages are retrieved indirectly from the Room instance
+        // XXX: Implement $since
+        $messages = $this->room->getMessages(0);
         $this->assertNotEmpty($messages);
 
         foreach ($messages as $k=>$msg) {
