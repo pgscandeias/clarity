@@ -140,6 +140,7 @@ form .controls {
 }
 .chat-room .chat {
     margin: 7em 0 1em;
+    border-bottom: 1px solid #ccc;
 }
 .chat-room .title {
     position: fixed;
@@ -154,6 +155,7 @@ form .controls {
     margin-top: 2.5em;
     padding-top: 0.1em;
     background: #eee;
+    box-shadow: 0 5px 5px #ccc;
 }
 .chat-room footer {
     position: fixed;
