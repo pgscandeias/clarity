@@ -39,5 +39,7 @@ class Message extends AppModel
 
         if ($this->id) $this->update($params);
         else $this->insert($columns, $params);
+
+        $this->room->save(); // Set $updated to now
     }
 }
