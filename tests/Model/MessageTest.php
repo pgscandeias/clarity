@@ -91,7 +91,6 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         }
 
         // Messages are retrieved indirectly from the Room instance
-        // XXX: Implement $since
         $messages = $this->room->getMessages(0);
         $this->assertNotEmpty($messages);
 
@@ -101,6 +100,8 @@ class MessageTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($this->user->id, $msg->user->id);
             $this->assertEquals($this->user->name, $msg->user->name);
             $this->assertEquals($this->user->email, $msg->user->email);
+            $this->assertNull(@$msg->user->authToken);
+            $this->assertNull(@$msg->user->loginToken);
             $this->assertEquals($this->room, $msg->room);
         }
     }

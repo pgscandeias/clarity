@@ -20,8 +20,18 @@ class User extends AppModel
     {
         parent::__construct($data);
 
-        $this->loginToken = static::generateToken();
-        $this->authToken = static::generateToken();
+        
+    }
+
+    public function save()
+    {
+        // Set tokens if this is a new user
+        if (!@$this->id) {
+            $this->loginToken = static::generateToken();
+            $this->authToken = static::generateToken();
+        }
+
+        return parent::save();
     }
 
     public static function generateToken()
