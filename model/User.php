@@ -46,6 +46,18 @@ class User extends AppModel
         return $this;
     }
 
+    public function expireAuthCookie(Cookie $cookie)
+    {
+        $tokenCookie = $cookie::generate();
+        $tokenCookie
+            ->setName('auth_token')
+            ->setValue(null)
+            ->setExpire(time() - 1)
+            ->setPath('/')
+            ->send()
+        ;
+    }
+
     public function addAccount(Account $account, $role = 'user')
     {
         $r = new Role;

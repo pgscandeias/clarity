@@ -92,7 +92,13 @@ $app->get('/auth', function() use ($app) {
 });
 
 $app->get('/logout', function() use ($app) {
+    $user = activeUser($app);
     session_destroy();
+
+    if ($user) {
+        $user->expireAuthCookie($app->cookie);
+    }
+
     $app->redirect('/');
 });
 
@@ -104,7 +110,11 @@ $app->get('/logout', function() use ($app) {
 // Homepage
 
 $app->get('/', function() use ($app, $view) {
-    $html = $view->render('index.tpl.php', array('session' => $app->session));
+    $user = activeUser($app, false);
+    $html = $view->render('index.tpl.php', array(
+        'session' => $app->session,
+        'user' => $user,
+    ));
     file_put_contents(cachePath('/'), $html);
     echo $html;
 
@@ -309,17 +319,17 @@ if (APP_ENV != 'prod') {
 die(show404($view));
 
 
-function activeUser($app) {
+function activeUser($app, $redirect = true) {
     $token = $app->cookie->get('auth_token');
     $user = User::findOneBy('authToken', $token);
-    if (!$user) {
+    if (!$user && $redirect) {
         $app->redirect('/');
         die;
     }
-
-    $user->renewAuthCookie($app->cookie);
-
-    return $user;
+    elseif ($user) {
+        $user->renewAuthCookie($app->cookie);
+        return $user;
+    }
 }
 
 function show404($view)

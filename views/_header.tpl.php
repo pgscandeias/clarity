@@ -14,8 +14,13 @@
         <div class='title'>
             <div class='container'>
                 <ul class='public-top-nav inline unstyled'>
-                    <li><a href='/'>Home</a></li>
-                    <li><a href='/login'>Login</a></li>
+                    <? if ($user): ?>
+                        <li><a href='/dashboard'>Dashboard</a></li>
+                        <li><a href='/logout'>Logout</a></li>
+                    <? else: ?>
+                        <li><a href='/'>Home</a></li>
+                        <li><a href='/login'>Login</a></li>
+                    <? endif ?>
                 </ul>
 
                 <h1>
