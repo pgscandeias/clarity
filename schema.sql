@@ -54,5 +54,22 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `updated` DATETIME NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX account (account_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- 
+-- Structure for table `messages`
+-- 
+
+DROP TABLE IF EXISTS `messages`;
+CREATE TABLE IF NOT EXISTS `messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `room_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` DATETIME NOT NULL,
+  `message` text NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX room (room_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
