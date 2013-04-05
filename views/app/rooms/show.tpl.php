@@ -29,6 +29,19 @@
 <center id='chatFooter'>*</center>
 
 
+<form action='' method='post' class='form-message'>
+    <table>
+        <tr>
+            <td class='message'>
+                <textarea name='message' class='form-control inline'></textarea>
+            </td>
+            <td class='button'>
+                <button class='submit form-control'>send<br><small><?= $_control_key ?>+enter</small></button>
+            </td>
+        </tr>
+    </table>
+</form>
+
 <script>var room = <?= $room->id ?>;</script>
 <script src="/js/rooms.show.js"></script>
 <? include __DIR__ . '/../_footer.tpl.php' ?>

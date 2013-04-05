@@ -139,13 +139,15 @@ form .controls {
     margin: 0;
 }
 .chat-room .chat {
-    margin: 7em 0 1em;
-    border-bottom: 1px solid #ccc;
+    margin: 7em 0 2.25em;
 }
 .chat-room .title {
     position: fixed;
     z-index: 9;
     width: 100%;
+}
+.chat-room footer {
+    display: none;
 }
 .chat-room .room-header {
     position: fixed;
@@ -157,15 +159,6 @@ form .controls {
     background: #eee;
     box-shadow: 0 5px 5px #ccc;
 }
-.chat-room footer {
-    position: fixed;
-    z-index: 9;
-    width: 100%;
-    bottom: 0;
-    margin: 1em 0 0;
-    padding-bottom: 0.5em;
-    background: #eee;
-}
 .form-room {
     position: fixed;
     top: 5em;
@@ -173,6 +166,47 @@ form .controls {
     z-index: 13;
 }
 
+
+/**
+ * Chat room message form
+ */
+.chat-room .form-message {
+    position: fixed;
+    z-index: 9;
+    width: 100%;
+    bottom: 0;
+    margin: 0;
+    padding: 0.25em 0;
+    background: #eee;
+    border-top: 1px solid #ccc;
+}
+.chat-room .form-control {
+    font-size: 90%;
+    height: 3em;
+    padding: 0.25em;
+    margin: 0 1em;
+    vertical-align: middle;
+    font-weight: 200;
+}
+.chat-room .form-message .submit {
+    width: 4em;
+    text-align: center;
+}
+.chat-room .form-message .submit small {
+    color: #777;
+    font-size: 0.6em;
+}
+.chat-room .form-message .message textarea {
+    width: 95%;
+    line-height: 1em;
+}
+
+.chat-room table {
+    width: 100%;
+}
+.chat-room .form-message .button {
+    width: 4em;
+}
 
 /**
  * Chat room messages

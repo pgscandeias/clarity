@@ -19,6 +19,8 @@ $(function(){
     timestamp = 0;
     loadNewMessages(timestamp);
     window.setInterval("loadNewMessages(timestamp)", 2000);
+
+    $(".form-message textarea").focus();
 });
 
 

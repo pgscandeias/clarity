@@ -11,6 +11,8 @@ class App {
   public $cookie;
   public $mail;
 
+  public $_control_key = 'ctrl';
+
   public function __construct() {
     // skipped mocking here
     $this->_server = $_SERVER;
@@ -18,6 +20,10 @@ class App {
     $this->session = new Session;
     $this->cookie = new Cookie;
     $this->mail = new Mail;
+
+    if (strstr($this->_server['HTTP_USER_AGENT'], 'Macintosh')) {
+      $this->_control_key = '⌘';
+    }
   }
 
   public function redirect($url, $status = 200)

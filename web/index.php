@@ -252,7 +252,6 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
         ));
     }
 
-
     echo @$format == 'json' ?
         json_encode($response)
         :
@@ -262,8 +261,34 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
             'user' => $user,
             'account' => $account,
             'room' => $room,
+            '_control_key' => $app->_control_key,
         ))
     ;
+});
+
+// Show room
+$app->post('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
+    $idFragments = explode('.', $id);
+    if (count($idFragments) == 1) {
+        $id = $idFragments[0];
+    } else {
+        $format = array_pop($idFragments);
+        $id = implode('.', $idFragments);
+    }
+
+    $user = activeUser($app);
+    $account = Account::findOneBy('slug', $slug);
+    $room = Room::get($account, $id);
+
+    if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
+
+    $m = new Message;
+    $m->user = $user;
+    $m->room = $room;
+    $m->message = $app->request->post('message');
+    $m->save();
+
+    $app->redirect("/$slug/rooms/$id");
 });
 
 // List rooms
