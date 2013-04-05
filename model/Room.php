@@ -77,6 +77,38 @@ class Room extends AppModel
         return $room;
     }
 
+    public function getMessages()
+    {
+        $q = '
+            SELECT m.*, u.id u_id, u.name u_name, u.email u_email
+            FROM '.Message::$_table.' m
+            JOIN '.User::$_table.' u on m.user_id = u.id
+            WHERE m.room_id = :rid
+            GROUP BY m.id
+            ORDER BY m.id ASC
+        ';
+
+        $messages = array();
+        $sth = static::$db->prepare($q);
+        if ($sth->execute(array(':rid' => $this->id))) {
+            $rows = $sth->fetchAll(PDO::FETCH_OBJ);
+            foreach ($rows as $row) {
+                $msg = new Message($row);
+                $msg->room = $this;
+                $msg->user = new User(array(
+                    'id' => $row->u_id,
+                    'name' => $row->u_name,
+                    'email' => $row->u_email,
+                ));
+                $messages[] = $msg;
+            }
+        } elseif (APP_ENV != 'prod') {
+            print_r($sth->errorInfo());die;
+        }
+
+        return $messages;
+    }
+
     public function url($absolute = false)
     {
         return $this->account->url($absolute) . '/rooms/' . $this->id;

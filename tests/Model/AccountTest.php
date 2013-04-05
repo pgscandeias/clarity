@@ -9,6 +9,7 @@ class AccountTest extends BaseTestCase
         $this->assertInstanceOf('Account', $a);
     }
 
+    // XXX: Move this to the RoomTest
     public function testGetRooms()
     {
         $u = $this->createSampleUser();

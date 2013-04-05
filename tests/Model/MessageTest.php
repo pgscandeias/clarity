@@ -72,4 +72,35 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($room->id, $dbMsg->room_id);
         $this->assertEquals('Howdy!', $dbMsg->message);
     }
+
+    public function testListRoomMessages()
+    {
+        $strings = array(
+            'Good evening Gentlemen',
+            'All your base are belong to us',
+            'There is no escape, make your time'
+        );
+        foreach ($strings as $s) {
+            $m = new Message;
+            $m->user = $this->user;
+            $m->room = $this->room;
+            $m->message = $s;
+            $m->save();
+            $this->assertNotNull($m->id);
+            $this->assertNotNull($m->created);
+        }
+
+        // Messages are retrieved indirectly from the Room
+        $messages = $this->room->getMessages();
+        $this->assertNotEmpty($messages);
+
+        foreach ($messages as $k=>$msg) {
+            $this->assertInstanceOf('Message', $msg);
+            $this->assertEquals($strings[$k], $msg->message);
+            $this->assertEquals($this->user->id, $msg->user->id);
+            $this->assertEquals($this->user->name, $msg->user->name);
+            $this->assertEquals($this->user->email, $msg->user->email);
+            $this->assertEquals($this->room, $msg->room);
+        }
+    }
 }
