@@ -225,13 +225,7 @@ $app->post('/:slug/rooms/:id/edit', function($slug, $id) use ($app, $view) {
 
 // Show room
 $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
-    $idFragments = explode('.', $id);
-    if (count($idFragments) == 1) {
-        $id = $idFragments[0];
-    } else {
-        $format = array_pop($idFragments);
-        $id = implode('.', $idFragments);
-    }
+    $format = Router::getFormat($id);
 
     $user = activeUser($app);
     $account = Account::findOneBy('slug', $slug);
@@ -239,18 +233,22 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
 
     if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
 
-    $since = $app->request->get('since');
+    $since = $app->request->get('since') ?: 0;
     $response = array(
         'timestamp' => time(),
+        'lastMessageId' => 0,
         'messages' => array(),
     );
-    $messages = $room->getMessages($since); // XXX: Implement $since
+    $messages = $room->getMessages($since);
     foreach ($messages as $m) {
         $response['messages'][] = $view->render('app/rooms/_message.tpl.php', array(
             'my' => $user,
             'm' => $m
         ));
     }
+    // XXX: Clean this up
+    $response['timestamp'] = @$m->created_micro ?: microtime(true) * 10000;
+    $response['lastMessageId'] = $m->id;
 
     echo @$format == 'json' ?
         json_encode($response)
@@ -266,15 +264,9 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     ;
 });
 
-// Show room
+// Post message
 $app->post('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
-    $idFragments = explode('.', $id);
-    if (count($idFragments) == 1) {
-        $id = $idFragments[0];
-    } else {
-        $format = array_pop($idFragments);
-        $id = implode('.', $idFragments);
-    }
+    $format = Router::getFormat($id);
 
     $user = activeUser($app);
     $account = Account::findOneBy('slug', $slug);
@@ -288,7 +280,18 @@ $app->post('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     $m->message = $app->request->post('message');
     $m->save();
 
-    $app->redirect("/$slug/rooms/$id");
+    if ($format == 'json') {
+        echo json_encode(array(
+            'timestamp' => time(),
+            'lastMessageId' => $m->id,
+            'message' => $view->render('app/rooms/_message.tpl.php', array(
+                'my' => $user,
+                'm' => $m
+            )),
+        ));
+    } else {
+        $app->redirect("/$slug/rooms/$id");
+    }
 });
 
 // List rooms

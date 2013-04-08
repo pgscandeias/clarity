@@ -49,4 +49,17 @@ class Router
         $parts = parse_url($url);
         return $parts['path'];
     }
+
+    public static function getFormat($url)
+    {
+        $fragments = explode('.', $url);
+        if (count($fragments) == 1) {
+            $id = $fragments[0];
+        } else {
+            $format = array_pop($fragments);
+            $id = implode('.', $fragments);
+        }
+
+        return @$format ?: 'html';
+    }
 }

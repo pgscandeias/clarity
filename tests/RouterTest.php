@@ -67,4 +67,15 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($noqs, Router::path($qs));
     }
+
+    public function testGetFormat()
+    {
+        $html   = '/i/am/html';
+        $json   = '/i/am.json';
+        $nojson = '/i/am';
+
+        $this->assertEquals('html', Router::getFormat($html));
+        $this->assertEquals('json', Router::getFormat($json));
+        $this->assertEquals('html', Router::getFormat($nojson));
+    }
 }

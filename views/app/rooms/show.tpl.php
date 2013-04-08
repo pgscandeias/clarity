@@ -29,11 +29,11 @@
 <center id='chatFooter'>*</center>
 
 
-<form action='' method='post' class='form-message'>
+<form action='' method='post' id='form-message' class='form-message'>
     <table>
         <tr>
             <td class='message'>
-                <textarea name='message' class='form-control inline'></textarea>
+                <textarea name='message' class='form-control inline' placeholder='type your message here'></textarea>
             </td>
             <td class='button'>
                 <button class='submit form-control'>send<br><small><?= $_control_key ?>+enter</small></button>

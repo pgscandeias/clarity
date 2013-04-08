@@ -1,6 +1,9 @@
-var scrolling = false;
+var scrolling, uri, lastMessageId = 0;
 
 $(function(){
+    scrolling = false;
+    uri = '/' + account + '/rooms/' + room + '.json';
+
     $("a[href=#]").click(function(e) { e.preventDefault(); });
 
     $("a.room-edit").click(function() {
@@ -16,9 +19,36 @@ $(function(){
         if (inView($("#chatFooter"))) scrolling = false;
     });
 
-    timestamp = 0;
-    loadNewMessages(timestamp);
-    window.setInterval("loadNewMessages(timestamp)", 2000);
+    loadNewMessages(lastMessageId);
+    window.setInterval("loadNewMessages(lastMessageId)", 2000);
+
+    // Sumit on ctrl+enter or cmd+enter
+    $("textarea").on('keydown', function(e) {
+        if (e.which == 13 && (e.metaKey || e.ctrlKey)) {
+            $("#form-message").submit();
+        }
+    });
+
+    // Catch form submit
+    $("#form-message").on('submit', function() {
+        var form = $(this);
+        $.ajax({
+            url: uri,
+            type: 'POST',
+            dataType: 'json',
+            data: form.serialize(),
+            success: function(data) {
+                lastMessageId = data.lastMessageId;
+                $("#chat").append(data.message);
+                $("#form-message textarea").val('');
+                if (!scrolling) scrollDown();
+            },
+            error: function() {
+                alert('Sorry, there was an error. Please try again.');
+            }
+        });
+        return false;
+    });
 
     $(".form-message textarea").focus();
 });
@@ -26,11 +56,11 @@ $(function(){
 
 function loadNewMessages(since)
 {
-    var uri = '/' + account + '/rooms/' + room + '.json';
-    if (since > 0) uri += '?since=' + since;
+    requestUri = uri;
+    if (since > 0) requestUri = uri + '?since=' + since;
 
-    $.getJSON(uri, function(data) {
-        timestamp = data.timestamp;
+    $.getJSON(requestUri, function(data) {
+        lastMessageId = data.lastMessageId;
         $.each(data.messages, function(i, m) {
             // messages are pre-rendered
             $("#chat").append(m);

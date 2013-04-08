@@ -5,7 +5,7 @@
         </footer>
 
         <script>
-            var timestamp = <?= time() ?>,
+            var timestamp = <?= microtime(true) * 10000 ?>,
                 account = '<?= @$account->slug ?>'
             ;
         </script>

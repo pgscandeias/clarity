@@ -21,7 +21,7 @@ class App {
     $this->cookie = new Cookie;
     $this->mail = new Mail;
 
-    if (strstr($this->_server['HTTP_USER_AGENT'], 'Macintosh')) {
+    if (strstr(@$this->_server['HTTP_USER_AGENT'], 'Macintosh')) {
       $this->_control_key = '⌘';
     }
   }

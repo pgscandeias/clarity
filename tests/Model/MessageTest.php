@@ -105,4 +105,25 @@ class MessageTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($this->room, $msg->room);
         }
     }
+
+    public function testCreatedMicro()
+    {
+        $m = new Message;
+        $m->user = $this->user;
+        $m->room = $this->room;
+        $m->message = 'Foobar';
+        $m->save();
+
+        $messages = $this->room->getMessages($m->id);
+        $this->assertEquals(0, count($messages));
+
+        $m2 = new Message;
+        $m2->user = $this->user;
+        $m2->room = $this->room;
+        $m2->message = 'Foobar';
+        $m2->save();
+
+        $messages = $this->room->getMessages($m->id);
+        $this->assertEquals(1, count($messages));
+    }
 }

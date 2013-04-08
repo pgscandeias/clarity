@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `room_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `created` DATETIME NOT NULL,
+  `created_micro` BIGINT UNSIGNED NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`),
   INDEX room (room_id)
