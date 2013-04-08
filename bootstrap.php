@@ -2,15 +2,15 @@
 
 # Configuration
 date_default_timezone_set('UTC');
-require_once 'config.php';
+require_once 'config/config.php';
 if (!defined('APP_ENV')) {
-    if (file_exists(__DIR__ . '/config.dev.ini')) {
+    if (file_exists(__DIR__ . '/config/config.dev.ini')) {
         define('APP_ENV', 'dev');
     } else {
         define('APP_ENV', 'prod');
     }
 }
-Config::_init(__DIR__ . '/config.'.APP_ENV.'.ini');
+Config::_init(__DIR__ . '/config/config.'.APP_ENV.'.ini');
 
 # Configuration - Protocol
 if (APP_ENV == 'prod') define('PROTOCOL', 'https');
