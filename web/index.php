@@ -248,7 +248,7 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     }
     // XXX: Clean this up
     $response['timestamp'] = @$m->created_micro ?: microtime(true) * 10000;
-    $response['lastMessageId'] = $m->id;
+    $response['lastMessageId'] = @$m->id ?: $since;
 
     echo @$format == 'json' ?
         json_encode($response)
