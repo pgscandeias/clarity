@@ -50,6 +50,12 @@ $(function(){
         return false;
     });
 
+
+    $("a.room-delete").on('click', function() {
+        return confirm('Are you sure? All room messages will be gone. This cannot be undone');
+    });
+
+
     $(".form-message textarea").focus();
 });
 

@@ -40,6 +40,18 @@ class RoomTest extends \PHPUnit_Framework_TestCase
         return $room;
     }
 
+    private function postMessage(Room $room, User $user, $msg)
+    {
+        $m = new Message;
+        $m->room = $room;
+        $m->user = $user;
+        $m->message = $msg;
+        $m->save();
+
+        return $m;
+    }
+
+
     public function testLoaded()
     {
         $room = new Room;
@@ -97,5 +109,21 @@ class RoomTest extends \PHPUnit_Framework_TestCase
         $updatedRoom = Room::get($account, $room->id);
         $this->assertEquals('New title', $updatedRoom->title);
         $this->assertEquals('New description', $updatedRoom->description);
+    }
+
+    public function testDelete()
+    {
+        $account = $this->account;
+        $user = $this->user;
+        $room = $this->createRoom($user, $account, 'Test title', 'Test description');
+
+        for ($i=0; $i<3; $i++) {
+            $this->postMessage($room, $user, 'Bla bla bla');
+        }
+        $this->assertEquals(3, count($room->getMessages()));
+
+        $room->delete();
+        $this->assertEquals(0, count($room->getMessages()));
+        $this->assertEmpty(Room::find($room->id));
     }
 }

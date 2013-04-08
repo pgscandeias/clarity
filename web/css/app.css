@@ -207,6 +207,12 @@ form .controls {
 .chat-room .form-message .button {
     width: 4em;
 }
+.chat-room .form-room .controls {
+    margin-bottom: 0.5em;
+}
+.chat-room .form-room .controls-delete {
+    text-align: right;
+}
 
 /**
  * Chat room messages

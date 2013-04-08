@@ -108,6 +108,13 @@ abstract class AppModel
         else $this->insert($columns, $params, $debug);
     }
 
+    public function delete()
+    {
+        $q = "DELETE FROM ".static::$_table." WHERE id = :id";
+        $sth = static::$db->prepare($q);
+        return $sth->execute(array(':id' => $this->id));
+    }
+
 
     protected function insert(array $columns, array $params, $debug = false)
     {

@@ -223,12 +223,28 @@ $app->post('/:slug/rooms/:id/edit', function($slug, $id) use ($app, $view) {
     $app->redirect($room->url());
 });
 
+// Delete room
+$app->get('/:slug/rooms/:id/delete', function($slug, $id) use ($app, $view) {
+    $format = Router::getFormat($id);
+
+    $user = activeUser($app);
+    $account = Account::findOneBy('slug', $slug);
+    $account->role = Role::get($user->id, $account->id);
+    if ($account->role->role != 'admin') $app->redirect("/$slug/rooms/$id");
+
+    $room = Room::get($account, $id);
+    if ($room) $room->delete();
+
+    $app->redirect("/$slug");
+});
+
 // Show room
 $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     $format = Router::getFormat($id);
 
     $user = activeUser($app);
     $account = Account::findOneBy('slug', $slug);
+    $account->role = Role::get($user->id, $account->id);
     $room = Room::get($account, $id);
 
     if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));

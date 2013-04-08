@@ -118,4 +118,13 @@ class Room extends AppModel
     {
         return $this->account->url($absolute) . '/rooms/' . $this->id;
     }
+
+    public function delete()
+    {
+        $q = "DELETE FROM ".Message::$_table." WHERE room_id = :rid";
+        $sth = static::$db->prepare($q);
+        $sth->execute(array(':rid' => $this->id));
+
+        return parent::delete();
+    }
 }

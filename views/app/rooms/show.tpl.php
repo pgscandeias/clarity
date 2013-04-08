@@ -23,6 +23,11 @@
         or
         <a href='#' class='room-cancel'>cancel</a>
     </div>
+    <? if ($account->role->role == 'admin'): ?>
+    <div class='controls controls-delete'>
+        <a href='/<?= $account->slug ?>/rooms/<?= $room->id ?>/delete' class='warning room-delete'>delete room</a>
+    </div>
+    <? endif; ?>
 </form>
 
 <table border='1' id='chat' class='chat unstyled'></table>
