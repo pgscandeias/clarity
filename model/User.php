@@ -8,12 +8,16 @@ class User extends AppModel
         'email',
         'loginToken',
         'authToken',
+        'timeZone',
+        'timeOffset',
     );
     
     public $name;
     public $email;
     public $loginToken;
     public $authToken;
+    public $timeZone = 'UTC';
+    public $timeOffset = 0;
     public $role; // In the context of an Account
 
     public function __construct($data = array())

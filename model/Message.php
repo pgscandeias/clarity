@@ -16,12 +16,11 @@ class Message extends AppModel
     public function __construct($data = array())
     {
         parent::__construct($data);
-
-        $this->created = date('Y-m-d H:i:s');
     }
 
     public function save()
     {
+        if (!$this->id) $this->created = date('Y-m-d H:i:s');
         if (!$this->user instanceof User) $error = 'no user set';
         if (!$this->room instanceof Room) $error = 'no room set';
         if (@$error) {
@@ -41,5 +40,13 @@ class Message extends AppModel
         else $this->insert($columns, $params);
 
         $this->room->save(); // Set $updated to now
+    }
+
+    public function getCreated(User $user)
+    {
+        if (!@$user->timeOffset) return $this->created;
+
+        $utc = strtotime($this->created);
+        return date('Y-m-d H:i:s', $utc + $user->timeOffset);
     }
 }

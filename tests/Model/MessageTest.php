@@ -51,8 +51,6 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     {
         $msg = new Message;
         $this->assertInstanceOf('Message', $msg);
-        $this->assertNotEmpty($msg->created);
-        $this->assertEquals(date('Y-m-d H:i:s'), $msg->created); // XXX: Temporal coupling. This could fail
     }
 
     public function testCreate()
@@ -65,6 +63,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $msg->room = $room;
         $msg->message = 'Howdy!';
         $msg->save();
+
+        $this->assertNotEmpty($msg->created);
+        $this->assertEquals(date('Y-m-d H:i:s'), $msg->created); // XXX: Temporal coupling. This could fail
 
         $dbMsg = Message::find($msg->id);
         $this->assertInstanceOf('Message', $dbMsg);

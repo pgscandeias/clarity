@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(255) NOT NULL,
   `loginToken` varchar(100) NOT NULL,
   `authToken` varchar(100) NOT NULL,
+  `timeZone` varchar(20) DEFAULT 'UTC',
+  `timeOffset` int(5) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
