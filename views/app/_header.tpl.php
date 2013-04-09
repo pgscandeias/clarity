@@ -24,6 +24,8 @@
                         Clarity
 
                     <? endif ?>
+
+                    <?= $title && $title != @$account->name ? ' / ' . $title : '' ?>
                 </nav>
 
                 <nav class='nav-user inline'>
