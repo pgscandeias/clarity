@@ -16,6 +16,10 @@
     <body class='<?= @$body ?>'>
         <div class='title'>
             <div class='inner-container'>
+                <nav class='nav-user inline'>
+                    <a href='/dashboard'><img class='avatar' src='<?= $user->gravatar(50) ?>'></a>
+                </nav>
+                
                 <nav class='nav-main inline lead'>
                     <? if (@$account): ?>
                         <a href='<?= $account->url() ?>'><?= e($account->name) ?></a>
@@ -28,9 +32,7 @@
                     <?= $title && $title != @$account->name ? ' / ' . $title : '' ?>
                 </nav>
 
-                <nav class='nav-user inline'>
-                    <a href='/dashboard'><img class='avatar' src='<?= $user->gravatar(50) ?>'></a>
-                </nav>
+                
             </div>
         </div>
 

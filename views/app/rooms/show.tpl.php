@@ -7,7 +7,6 @@
             <a href='/<?= $account->slug ?>'>All rooms</a>
         </p>
 
-        <strong class='room-title lead'><?= e($room->title) ?></strong>
         <p class='room-description'><?= nl2br(e($room->description)) ?></p>
     </div>
 </div>
