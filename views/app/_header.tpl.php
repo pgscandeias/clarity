@@ -17,7 +17,7 @@
         <div class='title'>
             <div class='inner-container'>
                 <nav class='nav-user inline'>
-                    <a href='/dashboard'><img class='avatar' src='<?= $user->gravatar(50) ?>'></a>
+                    <a href='/dashboard'><img class='avatar' src='<?= $user->gravatar(120) ?>'></a>
                 </nav>
                 
                 <nav class='nav-main inline lead'>
