@@ -2,6 +2,7 @@
 
 <p class='tools-top'>
     <a href='#' class='room-create'>Create new chat room</a>
+    <a href='/<?= $account->slug ?>/team' class='team-manage'>Team members</a>
 </p>
 
 <form action='/<?= $account->slug ?>/rooms/add' method='post' class='form-room form-room-create form-block' style='display: none;'>

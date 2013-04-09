@@ -3,7 +3,8 @@
 <div class='room-header'>
     <div class='inner-container'>
         <p class='tools-top'>
-            <a href='#' class='room-edit'>Change settings</a>
+            <a href='#' class='room-edit'>Room settings</a>
+            <a href='/<?= $account->slug ?>'>All rooms</a>
         </p>
 
         <strong class='room-title lead'><?= e($room->title) ?></strong>
