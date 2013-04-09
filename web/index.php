@@ -33,7 +33,7 @@ require_once __DIR__ . '/../bootstrap.php';
 #
 # Auth
 #
-$app->get('/login', function() {
+$app->get('/login', function() use($app) {
     echo $app->view->render('auth/login.tpl.php');
 });
 
@@ -340,11 +340,23 @@ $app->get('/:slug/team', function($slug) use ($app) {
 
     if (!$app->account || !$app->user->hasAccount($app->account)) 
         die(show404($app->view));
-    $app->account->role = Role::get($app->user->id, $app->account->id);
 
     echo $app->view->render('app/team/index.tpl.php', array(
         'title' => 'Team members',
     ));
+});
+
+$app->get('/:slug/team/:id/block', function($slug, $id) use ($app) {
+    $app->auth($slug, 'admin');
+
+    $role = Role::get($app->account->id, $id);
+    if ($role) {
+        $role->role = 'blocked';
+        $role->save();
+    }
+
+    $app->redirect("/$slug/team");
+
 });
 
 
@@ -354,8 +366,16 @@ $app->get('/:slug/team', function($slug) use ($app) {
 
 if (APP_ENV != 'prod') {
     $app->get('/admin/users', function() use ($app) {
+        $users = $app->users = User::all();
+        foreach ($users as $u) {
+            if (!$u->authToken) {
+                $u->authToken = User::generateToken();
+                $u->save();
+            }
+        }
+
         echo $app->view->render('admin/users.tpl.php', array(
-            'users' => $app->users = User::all()
+            'users' => $users,
         ));
     });
 }

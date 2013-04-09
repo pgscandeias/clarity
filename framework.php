@@ -69,7 +69,7 @@ class App {
   }
 
     // Ugly ugly mess of spaghetti code :(
-    public function auth($accountSlug = null, $redirect = true) {
+    public function auth($accountSlug = null, $role = null) {
         $token = $this->cookie->get('auth_token');
         $user = User::findOneBy('authToken', $token);
 
@@ -79,12 +79,18 @@ class App {
 
             if ($accountSlug) {
                 $account = Account::findOneBy('slug', $accountSlug);
-                if (!$account) $app->redirect('/');
+                if (!$account) $this->redirect('/');
 
-                $role = Role::get($user->id, $account->id);
-                if (!$role || $role->role == 'blocked') $app->redirect('/login');
+                $r = Role::get($user->id, $account->id);
+                if (
+                  !$r
+                  || $r->role == 'blocked'
+                  || ($role && $role != $r->role)
+                ) {
+                  $this->redirect('/login');
+                }
 
-                $user->role = $role;
+                $user->role = $r;
                 $this->account = $account;
                 $this->view->assign('account', $account);
             }

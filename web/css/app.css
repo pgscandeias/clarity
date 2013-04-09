@@ -12,7 +12,9 @@
 }
 .label-red {
     background: #c33;
-
+}
+.label-purple {
+    background: purple;
 }
 
 
@@ -314,4 +316,7 @@ form .controls {
 .team-roster .role,
 .team-roster .controls {
     text-align: right;
+}
+.team-roster .blocked td {
+    color: #955;
 }

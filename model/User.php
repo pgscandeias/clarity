@@ -85,7 +85,7 @@ class User extends AppModel
     }
 
     // Return a list of Accounts with the $role property populated for this user
-    public function getAccounts()
+    public function getAccounts($showBlocked = false)
     {
         // XXX: Hardcoding the ORDER clause for now
         $sth = static::$db->prepare('
@@ -104,6 +104,7 @@ class User extends AppModel
         $results = array();
         $rows = $sth->fetchAll(PDO::FETCH_OBJ);
         foreach ($rows as $row) {
+            if (!$showBlocked && $row->role == 'blocked') continue;
             $results[] = new Account($row);
         }
 

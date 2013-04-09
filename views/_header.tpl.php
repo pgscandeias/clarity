@@ -14,7 +14,7 @@
         <div class='title'>
             <div class='container'>
                 <ul class='public-top-nav inline unstyled'>
-                    <? if ($user): ?>
+                    <? if (@$user): ?>
                         <li><a href='/dashboard'>Dashboard</a></li>
                         <li><a href='/logout'>Logout</a></li>
                     <? else: ?>

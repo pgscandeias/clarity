@@ -8,25 +8,29 @@
     <tbody>
 
         <? foreach ($account->getUsers() as $u): ?>
-        <tr <? if ($u->id == $user->id): ?>class='me'<? endif ?>>
+        <tr class='<?= $u->role ?> <?= $u->id == $user->id ? 'me' : '' ?>'>
             <td class='avatar'>
                 <img src='<?= $u->gravatar(120) ?>' class='avatar'>
             </td>
             <td class='name'>
-                <?= e($u->name) ?>
+                <strong><?= e($u->name) ?></strong>
             </td>
             <td class='role'>
                 <? if ($u->role == 'admin'): ?>
-                    <span class='label label-red'><?= $u->role ?></span>
+                    <span class='label label-purple'><?= $u->role ?></span>
                 <? else: ?>
-                    &nbsp;
+                    <?= $u->role ?>
                 <? endif ?>
             </td>
             <td class='controls'>
                 <? if ($u->id == $user->id): ?>
                     It's you!
                 <? elseif ($user->role->role == 'admin'): ?>
-                    <a href='#'>block</a>
+                    <? if ($u->role == 'blocked'): ?>
+                        <a href='/<?= $account->slug ?>/team/<?= $u->id ?>/unblock'>unblock</a>
+                    <? else: ?>
+                        <a href='/<?= $account->slug ?>/team/<?= $u->id ?>/block'>block</a>
+                    <? endif ?>
                 <? endif ?>
             </td>
         </tr>
