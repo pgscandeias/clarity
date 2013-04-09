@@ -254,7 +254,7 @@ form .controls {
     width: 100%;
 }
 .chat .room-message {
-    border-top: 1px dotted #fff;
+    border-top: 1px solid #fff;
     margin: 0;
     padding: 0.15em 1em 0.3333em;
 }
@@ -299,10 +299,19 @@ form .controls {
 /**
  * Team roster
  */
-.team-roster li {
+.team-roster td {
+    height: 3em;
     line-height: 3em;
+    padding: 0.25em 0.5em;
+}
+.team-roster .me td {
+    background: #ddd;
 }
 .team-roster .avatar {
-    height: 3em;
     vertical-align: middle;
+    max-height: 100%;
+}
+.team-roster .role,
+.team-roster .controls {
+    text-align: right;
 }

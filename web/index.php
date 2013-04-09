@@ -357,6 +357,7 @@ $app->get('/:slug/team', function($slug) use ($app, $view) {
     $user = activeUser($app);
     $account = Account::findOneBy('slug', $slug);
     if (!$account || !$user->hasAccount($account)) die(show404($view));
+    $account->role = Role::get($user->id, $account->id);
 
     echo $view->render('app/team/index.tpl.php', array(
         'title' => 'Team members',
