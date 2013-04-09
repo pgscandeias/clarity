@@ -19,7 +19,7 @@
         <input type='text' name='account_name' value='<?= $session->form->get('account_name', false) ?>' required>
     </fieldset>
 
-    <button class='btn' type='submit'>Start 15-day free trial</button>
+    <button class='btn btn-green' type='submit'>Start 15-day free trial</button>
     <p>
         Just <strong>$9/month</strong> after that.
         <br>

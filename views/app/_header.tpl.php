@@ -33,3 +33,17 @@
         </div>
 
         <div class='container'>
+            <? if ($session->get('flash')): ?>
+                <ul class='unstyled flash-container'>
+                    <? foreach ($session->get('flash') as $type => $flash): ?>
+                        <? if (is_array($flash)): ?>
+                            <? foreach ($flash as $message): ?>
+                                <li class='flash flash-<?= $type ?>'><?= e($message) ?></li>
+                            <? endforeach ?>
+                        <? else: ?>
+                            <li class='flash flash-<?= $type ?>'><?= e($flash) ?></li>
+                        <? endif ?>
+                    <? endforeach ?>
+                </ul>
+                <? $session->remove('flash') ?>
+            <? endif ?>

@@ -127,4 +127,12 @@ class Room extends AppModel
 
         return parent::delete();
     }
+
+    public function getUpdated(User $user)
+    {
+        if (!@$user->timeOffset) return $this->updated;
+
+        $utc = strtotime($this->updated);
+        return date('Y-m-d H:i:s', $utc + $user->timeOffset);
+    }
 }

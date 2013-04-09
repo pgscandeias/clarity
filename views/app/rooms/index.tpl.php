@@ -34,7 +34,7 @@
                     <p class='room-description'><?= nl2br(e($r->description)) ?></p>
                     <span class='room-updated'>
                         last updated
-                        <strong><?= date('Y-m-d H:i', strtotime($r->updated)) ?></strong>
+                        <strong><?= date('Y-m-d H:i', strtotime($r->getUpdated($user))) ?></strong>
                     </span>
                 </a>
             </li>

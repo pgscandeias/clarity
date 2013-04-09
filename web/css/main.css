@@ -101,6 +101,7 @@ fieldset {
 input[type=text],
 input[type=email],
 textarea,
+select,
 .btn {
     font-family: inherit;
     font-size: inherit;
@@ -118,6 +119,9 @@ input[type=email],
 textarea {
     width: 15em;
     font-weight: 400;
+}
+select {
+    margin-bottom: 1em;
 }
 
 .btn {
@@ -139,6 +143,16 @@ textarea {
     border-color: #555;
     background: #555;
     color: #ddd;
+}
+
+.btn-green {
+    border-color: green;
+    color: #fff;
+    background: green;
+}
+.btn-green:hover {
+    background: #090;
+    border-color: #090;
 }
 
 
@@ -215,16 +229,6 @@ footer {
 .form-centered,
 .form-centered input {
     text-align: center;
-}
-
-.form-centered button {
-    border-color: green;
-    color: #fff;
-    background: green;
-}
-.form-centered button:hover {
-    background: #090;
-    border-color: #090;
 }
 
 .form-centered .help strong {

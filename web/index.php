@@ -190,6 +190,32 @@ $app->get('/dashboard', function() use ($app, $view) {
 });
 
 
+// App - User settings
+
+$app->get('/settings', function() use ($app, $view) {
+    $user = activeUser($app);
+
+    echo $view->render('app/settings.tpl.php', array(
+        'title' => 'Settings',
+        'user' => $user,
+    ));
+});
+
+$app->post('/settings', function() use ($app, $view) {
+    $user = activeUser($app);
+
+    $action = new SettingsAction($app, $user);
+
+    if ($action->errors) {
+        $app->session->set('flash', array('error' => $action->errors));
+    } else {
+        $app->session->set('flash', array('success' => 'Settings changed successfully'));
+    }
+
+    $app->redirect('/settings');
+});
+
+
 // App - Rooms
 
 // Create room

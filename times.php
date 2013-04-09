@@ -18,6 +18,7 @@ function getTimezones()
         if ($sign == '-') $seconds = $seconds * -1;
 
         $zones[$zone] = array(
+            'name' => $zone,
             'offsetLabel' => 'GMT'.$parts[0],
             'offsetSeconds' => $seconds,
         );
@@ -25,3 +26,5 @@ function getTimezones()
 
     return $zones;
 }
+
+file_put_contents(__DIR__ . '/config/timezones.json', json_encode(getTimezones()));

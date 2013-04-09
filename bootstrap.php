@@ -23,6 +23,10 @@ if (Config::get('environment') != 'prod') {
     error_reporting(0);
 }
 
+# Timezones
+require_once APP_ROOT . '/lib/TimeZone.php';
+TimeZone::init();
+
 # Composer
 require_once APP_ROOT . '/vendor/autoload.php';
 
@@ -38,7 +42,7 @@ foreach ($models as $m) {
 }
 
 # Actions
-$actions = array('Signup');
+$actions = array('Signup', 'Settings');
 foreach ($actions as $a) {
     require_once APP_ROOT . "/action/".$a."Action.php";
 }
@@ -49,3 +53,4 @@ AppModel::connect();
 # Init
 $app = new App();
 $view = new View(APP_ROOT . '/views/');
+$view->assign('session', $app->session);

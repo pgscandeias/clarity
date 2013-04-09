@@ -13,6 +13,25 @@
 }
 
 
+
+/**
+ * Flash messages
+ */
+.flash-container {
+    margin: 1em 0;
+}
+.flash {
+    padding: 0.25em 1em;
+}
+.flash-success {
+    background: #cfc;
+    color: #373;
+}
+.flash-error {
+    background: #fcc;
+    color: #933;
+}
+
 /**
  * Navigation
  */

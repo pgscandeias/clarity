@@ -8,7 +8,7 @@ class User extends AppModel
         'email',
         'loginToken',
         'authToken',
-        'timeZone',
+        'timezone',
         'timeOffset',
     );
     
@@ -16,7 +16,7 @@ class User extends AppModel
     public $email;
     public $loginToken;
     public $authToken;
-    public $timeZone = 'UTC';
+    public $timezone = 'UTC';
     public $timeOffset = 0;
     public $role; // In the context of an Account
 
