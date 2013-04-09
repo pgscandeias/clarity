@@ -133,7 +133,7 @@ class User extends AppModel
         $cachePath = $cacheDir . '/' . $size;
 
         if (!file_exists($cachePath)) {
-            mkdir($cacheDir);
+            @mkdir($cacheDir);
             $gravatarUrl = "https://www.gravatar.com/avatar/"
                          . md5($this->email)
                          . "?s=" . $size

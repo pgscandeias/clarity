@@ -351,6 +351,21 @@ $app->get('/:slug', function($slug) use ($app, $view) {
 });
 
 
+// App - team
+
+$app->get('/:slug/team', function($slug) use ($app, $view) {
+    $user = activeUser($app);
+    $account = Account::findOneBy('slug', $slug);
+    if (!$account || !$user->hasAccount($account)) die(show404($view));
+
+    echo $view->render('app/team/index.tpl.php', array(
+        'title' => 'Team members',
+        'user' => $user,
+        'account' => $account,
+    ));
+});
+
+
 #
 # DEV: Show a list of access tokens
 #

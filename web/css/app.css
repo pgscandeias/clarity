@@ -1,6 +1,21 @@
 /* App styles */
 
 
+/* Typography */
+
+.label {
+    background: #999;
+    color: #fff;
+    display: inline-block;
+    padding: 0.15em 0.5em;
+    line-height: 1em;
+}
+.label-red {
+    background: #c33;
+
+}
+
+
 /* Layout */
 
 .container {
@@ -281,4 +296,16 @@ form .controls {
 .chat .my-msg .name {
     background: #eee;
     color: #444;
+}
+
+
+/**
+ * Team roster
+ */
+.team-roster li {
+    line-height: 3em;
+}
+.team-roster .avatar {
+    height: 3em;
+    vertical-align: middle;
 }
