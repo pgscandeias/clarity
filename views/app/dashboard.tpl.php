@@ -7,10 +7,9 @@
 
 <h3>
     <?= e($user->name) ?>
-    <small>'s dashboard</small>
+    <small>'s Accounts:</small>
 </h3>
 
-<h4>Accounts</h4>
 <ul>
     <? foreach ($user->getAccounts() as $a): ?>
     <li>
