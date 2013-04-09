@@ -359,6 +359,19 @@ $app->get('/:slug/team/:id/block', function($slug, $id) use ($app) {
 
 });
 
+$app->get('/:slug/team/:id/unblock', function($slug, $id) use ($app) {
+    $app->auth($slug, 'admin');
+
+    $role = Role::get($app->account->id, $id);
+    if ($role) {
+        $role->role = 'user';
+        $role->save();
+    }
+
+    $app->redirect("/$slug/team");
+
+});
+
 
 #
 # DEV: Show a list of access tokens
