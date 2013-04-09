@@ -33,20 +33,20 @@ require_once __DIR__ . '/../bootstrap.php';
 #
 # Auth
 #
-$app->get('/login', function() use ($view) {
-    echo $view->render('auth/login.tpl.php');
+$app->get('/login', function() {
+    echo $app->view->render('auth/login.tpl.php');
 });
 
-$app->post('/login', function() use ($app, $view) {
+$app->post('/login', function() use ($app) {
     $email = (string) $app->request->post('email');
     $token = User::generateToken();
     $link = PROTOCOL . '://'.$_SERVER['HTTP_HOST'].'/auth?t='.$token;
 
-    $user = User::findOneBy('email', $email);
-    if ($user) {
+    $app->user = User::findOneBy('email', $email);
+    if ($app->user) {
         $emailBody = $view->render('auth/email.tpl.php', array('link' => $link));
-        $user->authToken = $token;
-        $user->save();
+        $app->user->authToken = $token;
+        $app->user->save();
 
         try {
             $app->mail->send($email, 'Access link', $emailBody);
@@ -54,7 +54,7 @@ $app->post('/login', function() use ($app, $view) {
             $app->session->set('user_email', $app->request->post('email'));
             $app->redirect('/login/sent');
         } catch (Exception $e) {
-            echo $view->render('auth/email_error.tpl.php');
+            echo $app->view->render('auth/email_error.tpl.php');
         }
 
     } else {
@@ -62,41 +62,39 @@ $app->post('/login', function() use ($app, $view) {
     }
 });
 
-$app->get('/login/sent', function() use ($app, $view) {
-    echo $view->render('auth/email_sent.tpl.php', array(
-        'email' => $app->session->get('user_email')
-    ));
-    die;
+$app->get('/login/sent', function() use ($app) {
     if ($app->session->get('wasLoginMailSent')) {
         $app->session->remove('wasLoginMailSent');
-        echo $view->render('auth/email_sent.tpl.php', array(
+        echo $app->view->render('auth/email_sent.tpl.php', array(
             'email' => $app->session->get('user_email')
         ));
 
-    } else { $app->redirect('/'); }
+    } else {
+        $app->redirect('/');
+    }
 });
 
 $app->get('/auth', function() use ($app) {
-    $user = false;
+    $app->user = false;
     $authToken = (string) trim($app->request->get('t'));
     if ($authToken) {
-        $user = User::findOneBy('authToken', $authToken);
+        $app->user = User::findOneBy('authToken', $authToken);
     }
-    if (!$user) { $app->redirect('/'); }
+    if (!$app->user) { $app->redirect('/'); }
 
     // regenerate Auth Cookie token
-    $user->renewAuthCookie($app->cookie)->save();
+    $app->user->renewAuthCookie($app->cookie)->save();
 
     // Go to dashboard
     $app->redirect('/dashboard');
 });
 
 $app->get('/logout', function() use ($app) {
-    $user = activeUser($app);
+    $app->user = activeUser($app);
     session_destroy();
 
-    if ($user) {
-        $user->expireAuthCookie($app->cookie);
+    if ($app->user) {
+        $app->user->expireAuthCookie($app->cookie);
     }
 
     $app->redirect('/');
@@ -109,12 +107,10 @@ $app->get('/logout', function() use ($app) {
 
 // Homepage
 
-$app->get('/', function() use ($app, $view) {
-    $user = activeUser($app, false);
-    $html = $view->render('index.tpl.php', array(
-        'session' => $app->session,
-        'user' => $user,
-    ));
+$app->get('/', function() use ($app) {
+    $app->auth();
+
+    $html = $app->view->render('index.tpl.php');
     file_put_contents(cachePath('/'), $html);
     echo $html;
 
@@ -124,24 +120,24 @@ $app->get('/', function() use ($app, $view) {
 
 // Help
 
-$app->get('/help/:page', function($page) use ($app, $view) {
+$app->get('/help/:page', function($page) use ($app) {
     $tpl = file_exists(__DIR__ . '/../views/help/'.$page.'.tpl.php') ? 
            'help/'.$page.'.tpl.php' :
            '404.tpl.php'
     ;
-    echo $view->render($tpl);
+    echo $app->view->render($tpl);
 });
 
 
 // Signup
 
-$app->get('/signup/welcome', function() use($app, $view) {
-    echo $view->render('signup/welcome.tpl.php', array(
+$app->get('/signup/welcome', function() use($app) {
+    echo $app->view->render('signup/welcome.tpl.php', array(
         'email' => $app->session->get('user_email')
     ));
 });
 
-$app->post('/signup', function() use($app, $view) {
+$app->post('/signup', function() use($app) {
     $action = new SignupAction($app);
 
     if ($action->errors) {
@@ -158,7 +154,7 @@ $app->post('/signup', function() use($app, $view) {
         $app->session->set('user_email', $action->user->email);
         $app->redirect('/signup/welcome');
     } catch (Exception $e) {
-        echo $view->render('signup/email_error.tpl.php');
+        echo $app->view->render('signup/email_error.tpl.php');
     }
 });
 
@@ -168,10 +164,10 @@ $app->post('/signup', function() use($app, $view) {
 #
 
 // Avatar
-$app->get('/avatar/:hash/:size', function($hash, $size) use ($app, $view) {
+$app->get('/avatar/:hash/:size', function($hash, $size) use ($app) {
     $filePath = User::gravatarCachePath() . '/' . $hash . '/' . $size;
     $info = @getimagesize($filePath);
-    if (!$info) die(show404($view));
+    if (!$info) die(show404($app->view));
 
     header('Content-type: ' . $info['mime']);
     die(file_get_contents($filePath));
@@ -180,31 +176,29 @@ $app->get('/avatar/:hash/:size', function($hash, $size) use ($app, $view) {
 
 // App - Dashboard
 
-$app->get('/dashboard', function() use ($app, $view) {
-    $user = activeUser($app);
+$app->get('/dashboard', function() use ($app) {
+    $app->auth();
 
-    echo $view->render('app/dashboard.tpl.php', array(
-        'title' => $user->name,
-        'user' => $user,
+    echo $app->view->render('app/dashboard.tpl.php', array(
+        'title' => $app->user->name,
     ));
 });
 
 
 // App - User settings
 
-$app->get('/settings', function() use ($app, $view) {
-    $user = activeUser($app);
+$app->get('/settings', function() use ($app) {
+    $app->auth();
 
-    echo $view->render('app/settings.tpl.php', array(
+    echo $app->view->render('app/settings.tpl.php', array(
         'title' => 'Settings',
-        'user' => $user,
     ));
 });
 
-$app->post('/settings', function() use ($app, $view) {
-    $user = activeUser($app);
+$app->post('/settings', function() use ($app) {
+    $app->auth();
 
-    $action = new SettingsAction($app, $user);
+    $action = new SettingsAction($app, $app->user);
 
     if ($action->errors) {
         $app->session->set('flash', array('error' => $action->errors));
@@ -219,28 +213,25 @@ $app->post('/settings', function() use ($app, $view) {
 // App - Rooms
 
 // Create room
-$app->post('/:slug/rooms/add', function($slug) use ($app, $view) {
-    $user = activeUser($app);
-    $account = Account::findOneBy('slug', $slug);
-    if (!$account || !$user->hasAccount($account)) die(show404($view));
+$app->post('/:slug/rooms/add', function($slug) use ($app) {
+    $app->auth($slug);
 
     $room = new Room;
-    $room->user = $user;
-    $room->account = $account;
+    $room->user = $app->user;
+    $room->account = $app->account;
     $room->title = $app->request->post('title');
     $room->description = $app->request->post('description');
     $room->save();
 
-    $app->redirect('/' . $account->slug . '/rooms/' . $room->id);
+    $app->redirect('/' . $app->account->slug . '/rooms/' . $room->id);
 });
 
 // Edit room
-$app->post('/:slug/rooms/:id/edit', function($slug, $id) use ($app, $view) {
-    $user = activeUser($app);
-    $account = Account::findOneBy('slug', $slug);
-    $room = Room::get($account, $id);
-
-    if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
+$app->post('/:slug/rooms/:id/edit', function($slug, $id) use ($app) {
+    $app->auth($slug);
+    $room = Room::get($app->account, $id);
+    if (!$app->account || !$app->user->hasAccount($app->account) || !$room) 
+        die(show404($app->view));
 
     $room->title = $app->request->post('title');
     $room->description = $app->request->post('description');
@@ -250,30 +241,27 @@ $app->post('/:slug/rooms/:id/edit', function($slug, $id) use ($app, $view) {
 });
 
 // Delete room
-$app->get('/:slug/rooms/:id/delete', function($slug, $id) use ($app, $view) {
+$app->get('/:slug/rooms/:id/delete', function($slug, $id) use ($app) {
     $format = Router::getFormat($id);
 
-    $user = activeUser($app);
-    $account = Account::findOneBy('slug', $slug);
-    $account->role = Role::get($user->id, $account->id);
-    if ($account->role->role != 'admin') $app->redirect("/$slug/rooms/$id");
+    $app->auth($slug);
+    if ($app->account->role->role != 'admin') $app->redirect("/$slug/rooms/$id");
 
-    $room = Room::get($account, $id);
+    $room = Room::get($app->account, $id);
     if ($room) $room->delete();
 
     $app->redirect("/$slug");
 });
 
 // Show room
-$app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
+$app->get('/:slug/rooms/:id', function($slug, $id) use ($app) {
     $format = Router::getFormat($id);
 
-    $user = activeUser($app);
-    $account = Account::findOneBy('slug', $slug);
-    $account->role = Role::get($user->id, $account->id);
-    $room = Room::get($account, $id);
+    $app->auth($slug);
+    $room = Room::get($app->account, $id);
 
-    if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
+    if (!$app->account || !$app->user->hasAccount($app->account) || !$room) 
+        die(show404($app->view));
 
     $since = $app->request->get('since') ?: 0;
     $response = array(
@@ -283,8 +271,8 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     );
     $messages = $room->getMessages($since);
     foreach ($messages as $m) {
-        $response['messages'][] = $view->render('app/rooms/_message.tpl.php', array(
-            'my' => $user,
+        $response['messages'][] = $app->view->render('app/rooms/_message.tpl.php', array(
+            'my' => $app->user,
             'm' => $m
         ));
     }
@@ -295,11 +283,9 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
     echo @$format == 'json' ?
         json_encode($response)
         :
-        $view->render('app/rooms/show.tpl.php', array(
+        $app->view->render('app/rooms/show.tpl.php', array(
             'body' => 'chat-room',
             'title' => $room->title,
-            'user' => $user,
-            'account' => $account,
             'room' => $room,
             '_control_key' => $app->_control_key,
         ))
@@ -307,17 +293,17 @@ $app->get('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
 });
 
 // Post message
-$app->post('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
+$app->post('/:slug/rooms/:id', function($slug, $id) use ($app) {
     $format = Router::getFormat($id);
 
-    $user = activeUser($app);
-    $account = Account::findOneBy('slug', $slug);
-    $room = Room::get($account, $id);
+    $app->auth($slug);
+    $room = Room::get($app->account, $id);
 
-    if (!$account || !$user->hasAccount($account) || !$room) die(show404($view));
+    if (!$app->account || !$app->user->hasAccount($app->account) || !$room) 
+        die(show404($app->view));
 
     $m = new Message;
-    $m->user = $user;
+    $m->user = $app->user;
     $m->room = $room;
     $m->message = $app->request->post('message');
     $m->save();
@@ -326,8 +312,8 @@ $app->post('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
         echo json_encode(array(
             'timestamp' => time(),
             'lastMessageId' => $m->id,
-            'message' => $view->render('app/rooms/_message.tpl.php', array(
-                'my' => $user,
+            'message' => $app->view->render('app/rooms/_message.tpl.php', array(
+                'my' => $app->user,
                 'm' => $m
             )),
         ));
@@ -337,32 +323,27 @@ $app->post('/:slug/rooms/:id', function($slug, $id) use ($app, $view) {
 });
 
 // List rooms
-$app->get('/:slug', function($slug) use ($app, $view) {
-    $user = activeUser($app);
-    $account = Account::findOneBy('slug', $slug);
-    if (!$account || !$user->hasAccount($account)) die(show404($view));
+$app->get('/:slug', function($slug) use ($app) {
+    $app->auth($slug);
 
-    echo $view->render('app/rooms/index.tpl.php', array(
-        'title' => $account->name,
-        'user' => $user,
-        'account' => $account,
-        'rooms' => $account->getRooms(),
+    echo $app->view->render('app/rooms/index.tpl.php', array(
+        'title' => $app->account->name,
+        'rooms' => $app->account->getRooms(),
     ));
 });
 
 
 // App - team
 
-$app->get('/:slug/team', function($slug) use ($app, $view) {
-    $user = activeUser($app);
-    $account = Account::findOneBy('slug', $slug);
-    if (!$account || !$user->hasAccount($account)) die(show404($view));
-    $account->role = Role::get($user->id, $account->id);
+$app->get('/:slug/team', function($slug) use ($app) {
+    $app->auth($slug);
 
-    echo $view->render('app/team/index.tpl.php', array(
+    if (!$app->account || !$app->user->hasAccount($app->account)) 
+        die(show404($app->view));
+    $app->account->role = Role::get($app->user->id, $app->account->id);
+
+    echo $app->view->render('app/team/index.tpl.php', array(
         'title' => 'Team members',
-        'user' => $user,
-        'account' => $account,
     ));
 });
 
@@ -372,9 +353,9 @@ $app->get('/:slug/team', function($slug) use ($app, $view) {
 #
 
 if (APP_ENV != 'prod') {
-    $app->get('/admin/users', function() use ($app, $view) {
-        echo $view->render('admin/users.tpl.php', array(
-            'users' => $users = User::all()
+    $app->get('/admin/users', function() use ($app) {
+        echo $app->view->render('admin/users.tpl.php', array(
+            'users' => $app->users = User::all()
         ));
     });
 }
@@ -382,21 +363,7 @@ if (APP_ENV != 'prod') {
 #
 # 404
 #
-die(show404($view));
-
-
-function activeUser($app, $redirect = true) {
-    $token = $app->cookie->get('auth_token');
-    $user = User::findOneBy('authToken', $token);
-    if (!$user && $redirect) {
-        $app->redirect('/');
-        die;
-    }
-    elseif ($user) {
-        $user->renewAuthCookie($app->cookie);
-        return $user;
-    }
-}
+die(show404($app->view));
 
 function show404($view)
 {

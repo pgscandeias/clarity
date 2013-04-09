@@ -52,5 +52,3 @@ AppModel::connect();
 
 # Init
 $app = new App();
-$view = new View(APP_ROOT . '/views/');
-$view->assign('session', $app->session);

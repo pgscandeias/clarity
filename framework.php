@@ -11,6 +11,9 @@ class App {
   public $cookie;
   public $mail;
 
+  public $user;     // User instance (active user)
+  public $account;  // Account instance (current account)
+
   public $_control_key = 'ctrl';
 
   public function __construct() {
@@ -20,6 +23,9 @@ class App {
     $this->session = new Session;
     $this->cookie = new Cookie;
     $this->mail = new Mail;
+
+    $this->view = new View(APP_ROOT . '/views/');
+    $this->view->assign('session', $this->session);
 
     if (strstr(@$this->_server['HTTP_USER_AGENT'], 'Macintosh')) {
       $this->_control_key = '⌘';
@@ -61,6 +67,35 @@ class App {
   public function post($pattern, $callback) {
     $this->_route('POST', $pattern, $callback);
   }
+
+    // Ugly ugly mess of spaghetti code :(
+    public function auth($accountSlug = null, $redirect = true) {
+        $token = $this->cookie->get('auth_token');
+        $user = User::findOneBy('authToken', $token);
+
+        if ($user) {
+            $this->user = $user;
+            $this->view->assign('user', $user);
+
+            if ($accountSlug) {
+                $account = Account::findOneBy('slug', $accountSlug);
+                if (!$account) $app->redirect('/');
+
+                $role = Role::get($user->id, $account->id);
+                if (!$role || $role->role == 'blocked') $app->redirect('/login');
+
+                $user->role = $role;
+                $this->account = $account;
+                $this->view->assign('account', $account);
+            }
+
+            $user->renewAuthCookie($this->cookie);
+            return $user;
+        }
+
+        if ($redirect) $app->redirect('/');
+    }
+
 
 
   protected function _route($method, $pattern, $callback) {

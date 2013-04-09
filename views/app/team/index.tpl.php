@@ -25,7 +25,7 @@
             <td class='controls'>
                 <? if ($u->id == $user->id): ?>
                     It's you!
-                <? elseif ($account->role->role == 'admin'): ?>
+                <? elseif ($user->role->role == 'admin'): ?>
                     <a href='#'>block</a>
                 <? endif ?>
             </td>

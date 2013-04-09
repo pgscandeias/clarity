@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,  
   `account_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `role` ENUM('user', 'mod', 'admin', 'superadmin'),
+  `role` ENUM('blocked', 'user', 'mod', 'admin', 'superadmin'),
   PRIMARY KEY (`id`),
   INDEX account_user (account_id, user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

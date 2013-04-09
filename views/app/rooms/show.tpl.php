@@ -23,7 +23,7 @@
         or
         <a href='#' class='room-cancel'>cancel</a>
     </div>
-    <? if ($account->role->role == 'admin'): ?>
+    <? if ($user->role->role == 'admin'): ?>
     <div class='controls controls-delete'>
         <a href='/<?= $account->slug ?>/rooms/<?= $room->id ?>/delete' class='warning room-delete'>delete room</a>
     </div>
