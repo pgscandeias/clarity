@@ -81,7 +81,7 @@ class App {
                 $account = Account::findOneBy('slug', $accountSlug);
                 if (!$account) $this->redirect('/');
 
-                $r = Role::get($user->id, $account->id);
+                $r = Role::get($account->id, $user->id);
                 if (
                   !$r
                   || $r->role == 'blocked'
