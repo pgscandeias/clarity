@@ -66,17 +66,25 @@ abstract class AppModel
         return static::findOneBy('id', $id);
     }
 
-    public static function findOneBy($field, $value)
+    public static function findOneBy($field, $value = null)
     {
         if (empty(static::$_table)) return;
+
+        if (!is_array($field)) $input = array($field => $value);
+        else $input = $field;
+
+        foreach ($input as $k => $v) {
+            @$params[":$k"] = $v;
+            @$pairs[] = "$k = :$k";
+        }
 
         $sth = static::$db->prepare('
             SELECT *
             FROM '.static::$_table.'
-            WHERE '.$field.' = :value
-        ');
+            WHERE '.implode(' AND ', $pairs)
+        );
 
-        if (!$sth->execute(array(':value' => $value))) return;
+        if (!$sth->execute($params)) return;
 
         $row = $sth->fetch(PDO::FETCH_OBJ);
         if (!$row) return;
@@ -126,7 +134,11 @@ abstract class AppModel
         ;
         $sth = static::$db->prepare($q);
         if (!$sth->execute($params)) {
-            if (APP_ENV != 'prod') { var_dump($sth->errorInfo()); die; }
+            if (APP_ENV != 'prod') {
+                echo get_class($this);
+                var_dump($sth->errorInfo());
+                die;
+            }
             return;
         }
 
