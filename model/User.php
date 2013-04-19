@@ -79,6 +79,7 @@ class User extends AppModel
         $r->account_id = $account->id;
         $r->user_id = $this->id;
         $r->role = $role;
+        $r->hasJoined = true;
         $r->save();
 
         return $r;

@@ -1,7 +1,7 @@
 <?php
 
 
-class SignupTest extends \PHPUnit_Framework_TestCase
+class SignupTest extends BaseTestCase
 {
     private $app;
 
@@ -37,6 +37,7 @@ class SignupTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($s->user->id);
         $this->assertNotNull($s->account->id);
         $this->assertNotNull($s->role->id);
+        $this->assertTrue($s->role->hasJoined);
     }
 
     public function testRepeatedSignup()

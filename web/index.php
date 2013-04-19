@@ -335,6 +335,7 @@ $app->get('/:slug', function($slug) use ($app) {
 
 // App - team
 
+// List team members
 $app->get('/:slug/team', function($slug) use ($app) {
     $app->auth($slug);
 
@@ -346,11 +347,12 @@ $app->get('/:slug/team', function($slug) use ($app) {
     ));
 });
 
+// Block
 $app->get('/:slug/team/:id/block', function($slug, $id) use ($app) {
     $app->auth($slug, 'admin');
 
     $role = Role::get($app->account->id, $id);
-    if ($role) {
+    if ($role && $app->user->id != $id) { // Prevent blocking oneself
         $role->role = 'blocked';
         $role->save();
     }
@@ -359,17 +361,62 @@ $app->get('/:slug/team/:id/block', function($slug, $id) use ($app) {
 
 });
 
+// Unblock
 $app->get('/:slug/team/:id/unblock', function($slug, $id) use ($app) {
     $app->auth($slug, 'admin');
 
     $role = Role::get($app->account->id, $id);
-    if ($role) {
+    if ($role && $app->user->id != $id) { // Prevent blocking oneself
         $role->role = 'user';
         $role->save();
     }
 
     $app->redirect("/$slug/team");
 
+});
+
+// Invite
+$app->post('/:slug/team/invite', function($slug) use ($app) {
+    $app->auth($slug, 'admin');
+
+    $email = @$_POST['email'];
+    $name = @$_POST['name'];
+    if (!$email || $name) $app->redirect("/$slug/team");
+
+    // Find user, create it if none found
+    $user = User::findOneBy('email', $email);
+    if (!$user) {
+        $user = new User;
+        $user->name = $name;
+        $user->email = $email;
+        $user->save();
+    }
+
+    // Make sure user doesn't belong to this account yet
+    $role = Role::get($app->account->id, $user->id);
+    if (!$role) {
+        // Create a role for this user in this account
+        $role = $user->addAccount($app->account, 'invited');
+        $role->hasJoined = false;
+        $role->invitationToken = User::generateToken(); // Generic token generator
+        $role->save();
+
+        // Send an invitation email
+        $emailBody = $app->view->render('email/team_invite.tpl.php', array(
+            'user' => $app->user,
+            'account' => $app->account,
+            'link' => $app->account->url(true) . '/join/' . $role->invitationToken,
+        ));
+
+        try {
+            $app->mail->send($email, 'Join '.$app->account->name, $emailBody);
+            $app->redirect($app->account->url() . '/team');
+        } catch (Exception $e) {
+            echo $app->view->render('app/error.tpl.php');
+        }
+    }
+
+    $app->redirect("/$slug/team");
 });
 
 

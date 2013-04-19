@@ -3,6 +3,8 @@
 
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
+    private $app;
+
     protected $sampleUserData = array(
         'name' => 'Pedro',
         'email' => 'pgscandeias@gmail.com'
@@ -11,12 +13,14 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
+
+        $this->app = new App;
         $this->initDb();
     }
 
     protected function initDb($loadFixtures = false)
     {
-        User::$db->exec(file_get_contents(APP_ROOT . '/schema.sql'));
+        $res = User::$db->exec(file_get_contents(APP_ROOT . '/schema.sql'));
     }
 
     protected function createSampleUser()

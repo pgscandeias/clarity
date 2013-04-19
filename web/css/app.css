@@ -2,7 +2,6 @@
 
 
 /* Typography */
-
 .label {
     background: #999;
     color: #fff;
@@ -301,6 +300,9 @@ form .controls {
 /**
  * Team roster
  */
+.team-roster {
+    margin-bottom: 2em;
+}
 .team-roster td {
     height: 3em;
     line-height: 3em;
@@ -308,6 +310,10 @@ form .controls {
 }
 .team-roster .me td {
     background: #ddd;
+}
+
+.team-roster .invited td {
+    opacity: 0.5;
 }
 .team-roster .avatar {
     vertical-align: middle;
@@ -319,4 +325,8 @@ form .controls {
 }
 .team-roster .blocked td {
     color: #955;
+}
+
+.form-team-add {
+    margin: 2em 0 1em;
 }

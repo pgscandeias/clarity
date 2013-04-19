@@ -7,11 +7,13 @@ class Role extends AppModel
         'account_id',
         'user_id',
         'role',
+        'hasJoined',
     );
 
     public $account_id;
     public $user_id;
     public $role = 'user';
+    public $hasJoined = false;
 
     
     public static function get($accountId, $userId)
@@ -30,14 +32,6 @@ class Role extends AppModel
         $row = $sth->fetch(PDO::FETCH_OBJ);
         if (!$row) return;
 
-        $o = new static;
-        $o->id = $row->id;
-        foreach ($row as $field => $value) {
-            if (in_array($field, static::$_fields)) {
-                $o->{$field} = $value;
-            }
-        }
-
-        return $o;
+        return new static($row);
     }
 }

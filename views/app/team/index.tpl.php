@@ -27,9 +27,9 @@
                     It's you!
                 <? elseif ($user->role->role == 'admin'): ?>
                     <? if ($u->role == 'blocked'): ?>
-                        <a href='/<?= $account->slug ?>/team/<?= $u->id ?>/unblock'>unblock</a>
+                        <a href='<?= $account->url() ?>/team/<?= $u->id ?>/unblock'>unblock</a>
                     <? else: ?>
-                        <a href='/<?= $account->slug ?>/team/<?= $u->id ?>/block'>block</a>
+                        <a href='<?= $account->url() ?>/team/<?= $u->id ?>/block'>block</a>
                     <? endif ?>
                 <? endif ?>
             </td>
@@ -38,5 +38,24 @@
     </tbody>
 </table>
 
-<script src="/js/rooms.index.js"></script>
+
+<? if ($user->role->role == 'admin'): ?>
+    <a href='#' class='show-invite'>+ Invite a new team member</a>
+    <form action='<?= $account->url() ?>/team/invite' method='post' class='form-team-add' style='display: none'>
+
+        <label>Name:</label>
+        <input type='text' name='name' required>
+
+        <label>Email address:</label>
+        <input type='email' name='email' required>
+
+        <div class='control'>
+            <button>Send invitation</button>
+            or
+            <a href='#' class='cancel-invite'>cancel</a>
+        </div>
+    </form>
+<? endif ?>
+
+<script src="/js/team.index.js"></script>
 <? include __DIR__ . '/../_footer.tpl.php' ?>

@@ -29,7 +29,7 @@
 
                     <? endif ?>
 
-                    <?= $title && $title != @$account->name ? ' / ' . $title : '' ?>
+                    <?= @$title && $title != @$account->name ? ' / ' . $title : '' ?>
                 </nav>
 
                 
