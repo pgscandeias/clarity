@@ -2,16 +2,28 @@
 
 class Account extends AppModel
 {
+    private $_trial_days = 15;
+
     public static $_table = 'accounts';
     public static $_fields = array(
+        'created',
         'name',
         'slug',
+        'paid',
     );
 
+    public $created;
     public $name;
     public $slug;
+    public $paid = false;
     public $role; // Not saved in DB, populated by the User model
 
+
+    public function __construct($data = array())
+    {
+        parent::__construct($data);
+        $this->created = date('Y-m-d H:i:s');
+    }
 
     public function generateSlug($i = 1)
     {
@@ -98,6 +110,16 @@ class Account extends AppModel
         $role->save();
 
         return $role;
+    }
+
+    public function trialHasEnded()
+    {
+        $now = new DateTime;
+        $start = new DateTime($this->created);
+        $end = new DateTime($this->created);
+        $end->add(new DateInterval('P'.$this->_trial_days.'D'));
+
+        return $now <= $end;
     }
 }
 

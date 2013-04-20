@@ -22,8 +22,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 DROP TABLE IF EXISTS `accounts`;
 CREATE TABLE IF NOT EXISTS `accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` DATETIME NOT NULL,
   `name` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
+  `paid` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

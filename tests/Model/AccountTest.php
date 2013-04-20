@@ -86,4 +86,18 @@ class AccountTest extends BaseTestCase
             $this->checkUserAgainstDummy($user, $dummies, $k);
         }
     }
+
+    public function testAccountHasExpired()
+    {
+        $a = new Account;
+        $this->assertNotNull($a->created);
+
+        $now = new DateTime();
+        $fifteenDaysAgo = new DateTime();
+        $fifteenDaysAgo->sub(new DateInterval('P10D'));
+        $this->assertTrue($now > $fifteenDaysAgo);
+
+        $a->created = $fifteenDaysAgo->format('Y-m-d H:i:s');
+        $this->assertTrue($a->trialHasEnded());
+    }
 }

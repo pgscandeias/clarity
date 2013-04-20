@@ -12,6 +12,10 @@ abstract class AppModel
     {
         $data = (array) $data;
         foreach ($data as $property => $value) {
+            // XXX: Do this later but be sure to fix ALL THE THINGS!!!111oneone
+            // if ($property == 'created' || $property == 'updated') {
+            //     $value = new \DateTime($value);
+            // }
             $this->{$property} = $value;
         }
     }
@@ -135,8 +139,8 @@ abstract class AppModel
         $sth = static::$db->prepare($q);
         if (!$sth->execute($params)) {
             if (APP_ENV != 'prod') {
-                echo get_class($this);
-                var_dump($sth->errorInfo());
+                $error = $sth->errorInfo();
+                throw new \Exception("MySQL Err#".$error[0].": ".$error[2]);
                 die;
             }
             return;
