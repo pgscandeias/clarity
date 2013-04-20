@@ -7,7 +7,7 @@
 
 <h3>
     <?= e($user->name) ?>
-    <small>'s Accounts:</small>
+    <small>'s teams:</small>
 </h3>
 
 <ul>
