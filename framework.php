@@ -89,6 +89,10 @@ class App {
                   $this->redirect('/login');
                 }
 
+                if (!$r->hasJoined) {
+                  $r->hasJoined = true;
+                  $r->save();
+                }
                 $user->role = $r;
                 
                 
