@@ -2,6 +2,10 @@
 
 <p class='tools-top'>
     <a href='/<?= $account->slug ?>'>Chat rooms</a>
+    <a href='/<?= $account->slug ?>/team' class='team-manage'>Team members</a>
+    <? if ($user->isAdmin()): ?>
+        <a href='/<?= $account->slug ?>/team/settings'>Team settings</a>
+    <? endif ?>
 </p>
 
 <table class='team-roster'>

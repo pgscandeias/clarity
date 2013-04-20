@@ -439,8 +439,20 @@ $app->get('/:slug/join/:token', function($slug, $token) use ($app) {
 
 // Team settings
 $app->get('/:slug/team/settings', function($slug) use ($app) {
-    $app->auth($slug);
+    $app->auth($slug, 'admin');
 
+    echo $app->view->render('app/team/settings.tpl.php');
+});
+$app->post('/:slug/team/settings', function($slug) use ($app) {
+    $app->auth($slug, 'admin');
+
+    $name = $app->request->post('name');
+    if ($name) {
+        $app->account->name = $name;
+        $app->account->save();
+    }
+
+    $app->redirect("/$slug/team/settings");
 });
 
 
