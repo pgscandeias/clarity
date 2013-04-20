@@ -106,13 +106,14 @@
  */
 
 .tools-top {
-    text-align: right;
+    text-align: left;
+    margin: 0.5em 0 2em;
 }
 .tools-top a {
     display: inline-block;
     color: #050;
     font-weight: 400;
-    padding: 0 1em;
+    margin-right: 1em;
 }
 .tools-top a:last-child {
     padding-right: 0;
