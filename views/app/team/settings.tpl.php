@@ -36,10 +36,7 @@
 <p>
     Clarity is free for the first 15 days, then it costs only 
     <strong>9$/month</strong> per team for <strong>unlimited</strong> users.
-</p>
-<p>
-    Your money goes towards making Clarity better.
-    Thank you for your support.
+    The money goes towards making Clarity better.
 </p>
 
 <?
@@ -51,42 +48,60 @@ if (APP_ENV == 'dev') {
     $business = "5YYT252HWEKRA";
 }
 ?>
-<form action="https://www<?= $sandbox ?>.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="cmd" value="_xclick-subscriptions">
-    <input type="hidden" name="business" value="<?= $business ?>">
-    <input type="hidden" name="item_name" value="Clarity Chat Team Account">
-    <input type="hidden" name="item_number" value="100">
-    <input type="hidden" name="no_shipping" value="1">
-    <input type="hidden" name="return" value="<?= $account->url(true) ?>/team/subscribed">
-    <input type="hidden" name="cancel_return" value="<?= $account->url(true) ?>/team/settings">
-    <? /* Free trial: 15 days */ ?>
-    <input type="hidden" name="a1" value="0">
-    <input type="hidden" name="p1" value="15">
-    <input type="hidden" name="t1" value="D">
-    <? /* Regular rate: 9$USD per month */ ?>
-    <input type="hidden" name="a3" value="9.00">
-    <input type="hidden" name="p3" value="1">
-    <input type="hidden" name="t3" value="M">
-    <? /* Is this a subscription? Yes it is. */ ?>
-    <input type="hidden" name="src" value="1">
-    <? /* Auto retry billing on failure? Yes. */ ?>
-    <input type="hidden" name="sra" value="1">
+<? if (!$account->trialHasEnded()): ?>
+    <p>
+        You created the account on <?= date('Y-m-d', strtotime($account->created)) ?>
+        and are still in your trial period.
+    </p>
 
-    <input type="hidden" name="no_note" value="1">
-    <? /* Account and User Ids */ ?>
-    <input type="hidden" name="custom" value="a<?= $account->id ?>|u<?= $user->id ?>">
-    <? /* Invoice number 
-    <input type="hidden" name="invoice" value="invoicenumber">
-    */ ?>
-    <input type="hidden" name="usr_manage" value="1">
-    <input type="hidden" name="page_style" value="clarity1">
-    <input type="image"
-        src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif"
-        border="0" name="submit" 
-        alt="Subscribe to Clarity Chat"
-    >
-</form>
+<? elseif ($account->paid): ?>
+    <p>
+        Thank you for your support.
+        If for any reason you wish to stop paying for Clarity,
+        you may do so by simply logging in to your PayPal account and cancelling
+        the subscription there.
+        If you need help doing this, please do get in touch at:
 
+        <a href='mailto:pedro@pedrogilcandeias.com'>pedro@pedrogilcandeias.com</a>
+    </p>
 
+<? else: ?>
+    <form action="https://www<?= $sandbox ?>.paypal.com/cgi-bin/webscr" method="post">
+        <input type="hidden" name="cmd" value="_xclick-subscriptions">
+        <input type="hidden" name="business" value="<?= $business ?>">
+        <input type="hidden" name="item_name" value="Clarity Chat Team Account">
+        <input type="hidden" name="item_number" value="100">
+        <input type="hidden" name="no_shipping" value="1">
+        <input type="hidden" name="return" value="<?= $account->url(true) ?>/team/subscribed">
+        <input type="hidden" name="cancel_return" value="<?= $account->url(true) ?>/team/settings">
+        <? /* Free trial: 15 days */ ?>
+        <input type="hidden" name="a1" value="0">
+        <input type="hidden" name="p1" value="15">
+        <input type="hidden" name="t1" value="D">
+        <? /* Regular rate: 9$USD per month */ ?>
+        <input type="hidden" name="a3" value="9.00">
+        <input type="hidden" name="p3" value="1">
+        <input type="hidden" name="t3" value="M">
+        <? /* Is this a subscription? Yes it is. */ ?>
+        <input type="hidden" name="src" value="1">
+        <? /* Auto retry billing on failure? Yes. */ ?>
+        <input type="hidden" name="sra" value="1">
+
+        <input type="hidden" name="no_note" value="1">
+        <? /* Account and User Ids */ ?>
+        <input type="hidden" name="custom" value="a<?= $account->id ?>|u<?= $user->id ?>">
+        <? /* Invoice number 
+        <input type="hidden" name="invoice" value="invoicenumber">
+        */ ?>
+        <input type="hidden" name="usr_manage" value="1">
+        <input type="hidden" name="page_style" value="clarity1">
+        <input type="image"
+            src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif"
+            border="0" name="submit" 
+            alt="Subscribe to Clarity Chat"
+        >
+    </form>
+
+<? endif ?>
 
 <? include __DIR__ . '/../_footer.tpl.php' ?>

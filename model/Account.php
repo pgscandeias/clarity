@@ -22,7 +22,7 @@ class Account extends AppModel
     public function __construct($data = array())
     {
         parent::__construct($data);
-        $this->created = date('Y-m-d H:i:s');
+        $this->created = $this->created ?: date('Y-m-d H:i:s');
     }
 
     public function generateSlug($i = 1)
@@ -119,7 +119,7 @@ class Account extends AppModel
         $end = new DateTime($this->created);
         $end->add(new DateInterval('P'.$this->_trial_days.'D'));
 
-        return $now <= $end;
+        return $now >= $end;
     }
 }
 
