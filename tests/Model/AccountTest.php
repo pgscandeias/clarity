@@ -94,7 +94,7 @@ class AccountTest extends BaseTestCase
 
         $now = new DateTime();
         $fifteenDaysAgo = new DateTime();
-        $fifteenDaysAgo->sub(new DateInterval('P10D'));
+        $fifteenDaysAgo->sub(new DateInterval('P15D'));
         $this->assertTrue($now > $fifteenDaysAgo);
 
         $a->created = $fifteenDaysAgo->format('Y-m-d H:i:s');
