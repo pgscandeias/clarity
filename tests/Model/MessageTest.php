@@ -65,7 +65,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $msg->save();
 
         $this->assertNotEmpty($msg->created);
-        $this->assertEquals(date('Y-m-d H:i:s'), $msg->created); // XXX: Temporal coupling. This could fail
+        // $this->assertEquals(date('Y-m-d H:i:s'), $msg->created); // XXX: Temporal coupling. This could fail
 
         $dbMsg = Message::find($msg->id);
         $this->assertInstanceOf('Message', $dbMsg);

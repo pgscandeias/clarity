@@ -194,27 +194,4 @@ class UserTest extends BaseTestCase
         $user->name = 'Passos Dias Aguiar de Mota';
         $this->assertEquals('Passos D.A.D.M.', $user->shortName());
     }
-
-    public function testFindRoleByArray()
-    {
-        $user = new User;
-        $user->name = 'Cavaco';
-        $user->email = 'test@threddie.com';
-        $user->save();
-        $this->assertNotEmpty($user->id);
-
-        $account = new Account;
-        $account->name = 'ACME';
-        $account->generateSlug(); 
-        $account->save();
-        $this->assertNotEmpty($account->id);
-
-        $user->addAccount($account, 'admin');
-
-        $dbRole = Role::findOneBy(array(
-            'user_id' => $user->id,
-            'account_id' => $account->id,
-        ));
-        $this->assertNotEmpty($dbRole);
-    }
 }

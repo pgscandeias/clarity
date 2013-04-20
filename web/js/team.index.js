@@ -3,7 +3,7 @@ $(function(){
 
     $("a.show-invite").click(function() {
         $(".form-team-add").slideDown();
-        $("input[name=email]").focus();
+        $("input[name=name]").focus();
     });
     $("a.cancel-invite").click(function() {
         $(".form-team-add").slideUp();

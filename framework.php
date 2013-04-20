@@ -69,7 +69,7 @@ class App {
   }
 
     // Ugly ugly mess of spaghetti code :(
-    public function auth($accountSlug = null, $role = null) {
+    public function auth($accountSlug = null, $role = null, $redirect = true) {
         $token = $this->cookie->get('auth_token');
         $user = User::findOneBy('authToken', $token);
 
@@ -78,8 +78,7 @@ class App {
             $this->view->assign('user', $user);
 
             if ($accountSlug) {
-                $account = Account::findOneBy('slug', $accountSlug);
-                if (!$account) $this->redirect('/');
+                $account = $this->getAccount($accountSlug);
 
                 $r = Role::get($account->id, $user->id);
                 if (
@@ -91,15 +90,28 @@ class App {
                 }
 
                 $user->role = $r;
-                $this->account = $account;
-                $this->view->assign('account', $account);
+                
+                
             }
 
             $user->renewAuthCookie($this->cookie);
             return $user;
         }
 
-        if ($redirect) $app->redirect('/');
+        if ($redirect && $this->_server['REQUEST_URI'] != '/') {
+          $this->redirect('/');
+        }
+    }
+
+    public function getAccount($slug)
+    {
+        $account = Account::findOneBy('slug', $slug);
+        if (!$account) $this->redirect('/');
+
+        $this->account = $account;
+        $this->view->assign('account', $account);
+
+        return $account;
     }
 
 

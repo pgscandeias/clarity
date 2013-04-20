@@ -8,12 +8,14 @@ class Role extends AppModel
         'user_id',
         'role',
         'hasJoined',
+        'joinToken',
     );
 
     public $account_id;
     public $user_id;
     public $role = 'user';
     public $hasJoined = false;
+    public $joinToken;
 
     
     public static function get($accountId, $userId)

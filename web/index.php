@@ -396,16 +396,13 @@ $app->post('/:slug/team/invite', function($slug) use ($app) {
     $role = Role::get($app->account->id, $user->id);
     if (!$role) {
         // Create a role for this user in this account
-        $role = $user->addAccount($app->account, 'invited');
-        $role->hasJoined = false;
-        $role->invitationToken = User::generateToken(); // Generic token generator
-        $role->save();
+        $role = $this->account->invite($user);
 
         // Send an invitation email
         $emailBody = $app->view->render('email/team_invite.tpl.php', array(
             'user' => $app->user,
             'account' => $app->account,
-            'link' => $app->account->url(true) . '/join/' . $role->invitationToken,
+            'link' => $app->account->url(true) . '/join/' . $role->joinToken,
         ));
 
         try {
@@ -417,6 +414,29 @@ $app->post('/:slug/team/invite', function($slug) use ($app) {
     }
 
     $app->redirect("/$slug/team");
+});
+
+// Join
+$app->get('/:slug/join/:token', function($slug, $token) use ($app) {
+    $app->getAccount($slug);
+    $role = Role::findOneBy(array(
+        'joinToken' => trim($token),
+        'hasJoined' => false,
+    ));
+
+    if ($role && $user = User::find($role->user_id)) {
+        $role->role = 'user';
+        $role->hasJoined = true;
+        $role->save();
+
+        $user->renewAuthCookie($app->cookie);
+
+        $app->redirect("/$slug/team");
+    }
+
+    die("fail");
+
+    $app->redirect('/');
 });
 
 

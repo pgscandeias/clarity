@@ -89,6 +89,16 @@ class Account extends AppModel
 
         return $users;
     }
+
+    public function invite(User $user)
+    {
+        $role = $user->addAccount($this, 'invited');
+        $role->hasJoined = false;
+        $role->joinToken = User::generateToken(); // Generic token generator
+        $role->save();
+
+        return $role;
+    }
 }
 
 function slugify($string, $space = "-") {

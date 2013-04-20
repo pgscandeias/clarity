@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `user_id` int(11) NOT NULL,
   `role` ENUM('blocked', 'invited', 'user', 'mod', 'admin', 'superadmin'),
   `hasJoined` tinyint(1) DEFAULT 0,
+  `joinToken` varchar(100),
   PRIMARY KEY (`id`),
   INDEX account_user (account_id, user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
