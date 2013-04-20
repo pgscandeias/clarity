@@ -1,0 +1,13 @@
+<VirtualHost 198.199.82.149:443>
+    SSLEngine On
+    SSLCertificateFile /etc/apache2/ssl/claritychat.com.crt
+    SSLCertificateKeyFile /etc/apache2/ssl/claritychat.com.key
+    SSLCertificateChainFile /etc/apache2/ssl/PositiveSSLCA2.crt
+
+    ServerAdmin admin@claritychat.com
+    ServerName claritychat.com
+    ServerAlias claritychat.com
+    DocumentRoot /srv/www/claritychat.com/htdocs/
+    ErrorLog /srv/www/claritychat.com/logs/error.log
+    CustomLog /srv/www/claritychat.com/logs/access.log combined
+</VirtualHost>
