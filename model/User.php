@@ -168,4 +168,9 @@ class User extends AppModel
 
         return trim(implode(' ', array_merge(array($firstName), array($remainingNames))));
     }
+
+    public function isAdmin()
+    {
+        return $this->role->role == 'admin';
+    }
 }

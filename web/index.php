@@ -439,6 +439,11 @@ $app->get('/:slug/join/:token', function($slug, $token) use ($app) {
     $app->redirect('/');
 });
 
+// Team settings
+$app->get('/:slug/team/settings', function($slug) use ($app) {
+    $app->auth($slug, 'admin');
+});
+
 
 #
 # DEV: Show a list of access tokens

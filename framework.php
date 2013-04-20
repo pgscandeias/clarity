@@ -86,7 +86,7 @@ class App {
                   || $r->role == 'blocked'
                   || ($role && $role != $r->role)
                 ) {
-                  $this->redirect('/login');
+                  die($this->view->render('404.tpl.php'));
                 }
 
                 if (!$r->hasJoined) {
