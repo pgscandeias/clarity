@@ -437,7 +437,7 @@ $app->get('/:slug/join/:token', function($slug, $token) use ($app) {
     $app->redirect('/');
 });
 
-// Team settings
+// Team settings & billing
 $app->get('/:slug/team/settings', function($slug) use ($app) {
     $app->auth($slug, 'admin');
 
@@ -453,6 +453,13 @@ $app->post('/:slug/team/settings', function($slug) use ($app) {
     }
 
     $app->redirect("/$slug/team/settings");
+});
+
+// Paypal thank you page
+$app->get('/:slug/team/subscribed', function($slug) use ($app) {
+    $app->auth($slug, 'admin');
+
+    echo $app->view->render('app/team/subscribed.tpl.php');
 });
 
 
