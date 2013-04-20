@@ -462,6 +462,13 @@ $app->get('/:slug/team/subscribed', function($slug) use ($app) {
     echo $app->view->render('app/team/subscribed.tpl.php');
 });
 
+// IPN Listener
+// The url is obfuscated as a light measure of security
+// md5('I am not the most obvious of IPN endpoints, thank you very much')
+$app->post('/afd1df8accc82e1b0f5e552fece4c484', function() use ($app) {
+
+});
+
 
 #
 # DEV: Show a list of access tokens
