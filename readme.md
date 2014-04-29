@@ -3,7 +3,7 @@
 
 ## About
 
-A very clear and accessible tean chat app.
+A very clear and accessible team chat app.
 
 
 ## Requirements
